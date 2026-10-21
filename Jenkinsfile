@@ -4,10 +4,10 @@ pipeline {
  parameters {
   string(name: 'AWS_REGION', defaultValue: 'ap-south-1')
   string(name: 'EKS_CLUSTER', defaultValue: 'blogapp-eks')
-  string(name: 'ECR_REGISTRY', defaultValue: 'REPLACE_ACCOUNT.dkr.ecr.ap-south-1.amazonaws.com')
-  string(name: 'APP_URL', defaultValue: 'https://REPLACE_DOMAIN')
-  string(name: 'NEXUS_URL', defaultValue: 'https://REPLACE_NEXUS/repository/blog-releases')
-  string(name: 'NEXUS_DOCKER_REGISTRY', defaultValue: 'REPLACE_NEXUS_DOCKER_HOST:PORT')
+  string(name: 'ECR_REGISTRY', defaultValue: env.BLOG_ECR_REGISTRY ?: 'REPLACE_ACCOUNT.dkr.ecr.ap-south-1.amazonaws.com')
+  string(name: 'APP_URL', defaultValue: env.BLOG_APP_URL ?: 'https://REPLACE_DOMAIN')
+  string(name: 'NEXUS_URL', defaultValue: env.BLOG_NEXUS_URL ?: 'https://REPLACE_NEXUS/repository/blog-releases')
+  string(name: 'NEXUS_DOCKER_REGISTRY', defaultValue: env.BLOG_NEXUS_DOCKER_REGISTRY ?: 'REPLACE_NEXUS_DOCKER_HOST:PORT')
  }
  stages {
   stage('Checkout') { steps { checkout scm; script { env.IMAGE_TAG = sh(script: 'git rev-parse --short=12 HEAD', returnStdout:true).trim() + '-' + env.BUILD_NUMBER } } }
