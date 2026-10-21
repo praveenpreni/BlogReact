@@ -26,7 +26,7 @@ register.registerMetric(httpRequestDuration);
 app.use((req, res, next) => {
   const end = httpRequestDuration.startTimer();
   res.on('finish', () => {
-    end({ method: req.method, route: req.path, status: res.statusCode });
+    end({ method: req.method, route: req.route?.path || 'unmatched', status: res.statusCode });
   });
   next();
 });
@@ -54,7 +54,7 @@ app.get('/readyz', async (_req, res) => {
     await checkDbConnection();
     res.status(200).json({ status: 'ready' });
   } catch (err) {
-    res.status(503).json({ status: 'not-ready', error: err.message });
+    res.status(503).json({ status: 'not-ready', error: 'Database unavailable' });
   }
 });
 
@@ -71,8 +71,12 @@ app.use((err, _req, res, _next) => {
 
 app.use((_req, res) => res.status(404).json({ error: 'Route not found' }));
 
-app.listen(PORT, () => {
-  console.log(`Blog API listening on port ${PORT}`);
-});
+if (require.main === module) {
+  const server = app.listen(PORT, () => console.log(`Blog API listening on port ${PORT}`));
+  process.on('SIGTERM', () => {
+    server.close(async () => { await require('./config/db').pool.end(); process.exit(0); });
+    setTimeout(() => process.exit(1), 25000).unref();
+  });
+}
 
 module.exports = app;

@@ -1,0 +1,11 @@
+✔ post listing uses same origin API and encodes query (1.6204ms)
+✔ API errors reach caller (0.8665ms)
+✔ authenticated creation uses bearer token (0.4223ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 117.0637

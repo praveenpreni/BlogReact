@@ -1,129 +1,31 @@
-# Marginal — Blog App on EKS (CI/CD Reference Project)
+# Blog application on Amazon EKS
 
-A production-style 3-tier blog application — **React frontend, Node.js/Express backend,
-MySQL database** — deployed to **Amazon EKS** through a Jenkins pipeline that runs
-**SonarQube** (code quality), **Nexus** (artifact storage), **Trivy** (container scanning),
-and ships with **Prometheus/Grafana** monitoring hooks.
+Repository: https://github.com/praveenpreni/BlogReact
 
-## Architecture
+React frontend, Express API and persistent MySQL, with Docker builds, Jenkins delivery, SonarQube, Trivy, images in both Nexus and ECR, and Prometheus/Grafana resources.
 
-```
-                         ┌────────────────────────┐
- Browser ── HTTPS ──▶    │   ALB Ingress (EKS)     │
-                         └───────────┬─────────────┘
-                     ┌───────────────┴───────────────┐
-                     ▼                                ▼
-          ┌─────────────────────┐          ┌─────────────────────┐
-          │ frontend-service     │  /api → │ backend-service      │
-          │ (nginx + React SPA)  │────────▶│ (Node/Express API)   │
-          │ 3+ pods, HPA         │          │ 3+ pods, HPA          │
-          └─────────────────────┘          └──────────┬───────────┘
-                                                        ▼
-                                            ┌─────────────────────┐
-                                            │ mysql StatefulSet    │
-                                            │ + EBS gp3 volume     │
-                                            └─────────────────────┘
+## Run locally
 
-CI/CD:  Git push → Jenkins → npm test → SonarQube gate → Nexus (artifact) →
-        docker build → Trivy scan (fails on CRITICAL/HIGH) → push to ECR →
-        kubectl apply -k (EKS) → rollout status → smoke test
+1. Start Docker Desktop or a Linux Docker engine.
+2. Run `python scripts/create-local-env.py` once to create ignored strong local credentials.
+3. Run `docker compose --env-file ops/local.env up --build -d`.
+4. Open http://localhost:3000 and register an account.
+5. Run `APP_URL=http://localhost:3000 python3 scripts/smoke.py` in a Linux shell for write/read/comment verification.
 
-Monitoring: Prometheus Operator scrapes backend /metrics via ServiceMonitor,
-            PrometheusRule alerts on 5xx rate / crash loops / DB down,
-            Grafana dashboards on top (bring your own kube-prometheus-stack).
-```
+Do not remove the mysql-data volume to restart the database. Never share ops/local.env. The production schema creates tables without demo accounts or passwords.
 
-## Repository layout
+## Deploy to AWS
 
-```
-blog-app-eks/
-├── frontend/            React (Vite) SPA, nginx-unprivileged Docker image
-├── backend/              Express REST API, MySQL client, JWT auth, Prometheus metrics
-├── database/init.sql     Schema + seed data (users, posts, comments)
-├── k8s/
-│   ├── base/              Namespace, gp3 StorageClass
-│   ├── mysql/              StatefulSet, PVC, Secret, init ConfigMap
-│   ├── backend/            Deployment, Service, HPA, ConfigMap/Secret
-│   ├── frontend/           Deployment, Service, HPA
-│   ├── ingress/            ALB Ingress
-│   ├── monitoring/         ServiceMonitor + PrometheusRule
-│   └── kustomization.yaml  Ties everything together (`kubectl apply -k k8s/`)
-├── Jenkinsfile            Full CI/CD pipeline
-└── docker-compose.yml     Local dev: mysql + backend + frontend
-```
+Read [deployment order](docs/deployment.md), [environment mapping](docs/configuration.md) and [Nexus setup](docs/nexus.md).
 
-## Run it locally first
+Copy infra/deployment.example.json to ignored deployment.json. Review the bootstrap plan before using --apply. The private EKS API requires a host with VPC connectivity. The cluster template configures the managed EBS CSI driver with dedicated IAM, metrics-server and VPC CNI policy enforcement. The bootstrap installs the ALB controller, monitoring, certificate validation, DNS, registries and application resources.
 
-```bash
-docker compose up --build
-# frontend  → http://localhost:3000
-# backend   → http://localhost:5000/healthz
-# mysql     → localhost:3306 (bloguser / changeme)
-```
+The Jenkinsfile tests, enforces SonarQube quality, builds and scans images, archives the committed source to Nexus, and publishes the same scanned frontend and backend images to both Nexus and ECR. Main releases update EKS workloads and run application validation. Configure the real endpoints and protected credentials in Jenkins. EKS pulls from ECR.
 
-The seed data ships four demo posts; register a new account to write your own entries.
+## Verification
 
-## Prerequisites for the real EKS deployment
+See verification/STATUS.md and the saved test and dependency reports. Backend tests use Node native coverage and emit LCOV for SonarQube. Both full dependency audits are clean as of the recorded run; Trivy must still evaluate the built images.
 
-1. **EKS cluster** (`eksctl create cluster ...`) with:
-   - AWS EBS CSI driver add-on (for the `gp3` StorageClass / MySQL PVC)
-   - AWS Load Balancer Controller add-on (for the ALB Ingress)
-   - An ACM certificate for your domain, referenced in `k8s/ingress/ingress.yaml`
-2. **ECR** repositories: `blogapp-backend`, `blogapp-frontend`
-3. **Nexus** repository (npm-hosted) reachable from the Jenkins agent
-4. **SonarQube** server + a Jenkins `sonarqube-server` configuration
-5. **Trivy** installed on the Jenkins agent (or run as a container step)
-6. **kube-prometheus-stack** installed via Helm in a `monitoring` namespace
-   (provides the Prometheus Operator CRDs the `ServiceMonitor`/`PrometheusRule` need)
-7. Jenkins credentials: `aws-creds`, `sonarqube-token`, `nexus-creds`, `ecr-registry` (string)
+The database is single replica. Persistence is not high availability or an independent backup. Complete database restart, restore, network rejection, rolling traffic, failed gate and real monitoring demonstrations before claiming project acceptance.
 
-## Deploying manually (what the pipeline automates)
-
-```bash
-aws eks update-kubeconfig --name blogapp-eks-cluster --region ap-south-1
-
-# Load the real schema into the init ConfigMap
-kubectl create configmap mysql-init-script \
-  --from-file=init.sql=database/init.sql -n blogapp \
-  --dry-run=client -o yaml | kubectl apply -f -
-
-# Build & push images
-docker build -t <ECR_REGISTRY>/blogapp-backend:v1 ./backend
-docker build -t <ECR_REGISTRY>/blogapp-frontend:v1 ./frontend
-trivy image --severity CRITICAL,HIGH <ECR_REGISTRY>/blogapp-backend:v1
-docker push <ECR_REGISTRY>/blogapp-backend:v1
-docker push <ECR_REGISTRY>/blogapp-frontend:v1
-
-# Point the manifests at the images you just pushed, then apply
-sed -i "s#<ECR_REGISTRY>/blogapp-backend:IMAGE_TAG#<ECR_REGISTRY>/blogapp-backend:v1#" k8s/backend/deployment.yaml
-sed -i "s#<ECR_REGISTRY>/blogapp-frontend:IMAGE_TAG#<ECR_REGISTRY>/blogapp-frontend:v1#" k8s/frontend/deployment.yaml
-kubectl apply -k k8s/
-kubectl rollout status deployment/backend -n blogapp
-kubectl rollout status deployment/frontend -n blogapp
-kubectl get ingress blogapp-ingress -n blogapp
-```
-
-## Secrets — replace before real use
-
-`k8s/mysql/secret.yaml` and `k8s/backend/config.yaml` contain placeholder passwords
-(`REPLACE_WITH_...`). For production, don't commit real secrets — pull them from
-AWS Secrets Manager via the External Secrets Operator, or inject them at deploy time
-from a Jenkins credential store.
-
-## What each tool is doing in the pipeline
-
-| Stage | Tool | Purpose |
-|---|---|---|
-| Static analysis | **SonarQube** | Code smells, bugs, coverage, quality gate blocks bad merges |
-| Artifact storage | **Nexus** | Versioned backend package storage, single source of truth for releases |
-| Image scanning | **Trivy** | Fails the build on CRITICAL/HIGH CVEs in either image, plus a filesystem/dependency scan |
-| Registry | **ECR** | Stores the scanned, tagged images the cluster pulls from |
-| Deploy | **kubectl + kustomize** | Applies the full manifest set to EKS, waits for rollout health |
-| Monitoring | **Prometheus + Grafana** | Scrapes `/metrics`, alerts on error rate / crash loops / DB availability |
-
-## Frontend design notes
-
-The UI ("Marginal") is a custom-built design system, not a component-library
-default: a paper-grain background, Fraunces/Inter/IBM Plex Mono type pairing,
-moss-and-rust accent ink, and a signature **reading-spine** scroll-progress
-ruler on article pages. All tokens live in `frontend/src/index.css`.
+Deployment results and screenshots must come from actual execution. No live application URL or successful cloud deployment is claimed by these source files.

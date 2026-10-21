@@ -1,0 +1,30 @@
+{
+  "apiVersion": "monitoring.coreos.com/v1",
+  "kind": "ServiceMonitor",
+  "metadata": {
+    "name": "blog-backend",
+    "namespace": "monitoring",
+    "labels": {
+      "release": "monitoring"
+    }
+  },
+  "spec": {
+    "namespaceSelector": {
+      "matchNames": [
+        "blogapp"
+      ]
+    },
+    "selector": {
+      "matchLabels": {
+        "app": "backend"
+      }
+    },
+    "endpoints": [
+      {
+        "port": "http",
+        "path": "/metrics",
+        "interval": "30s"
+      }
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "apiVersion": "eksctl.io/v1alpha5",
+  "kind": "ClusterConfig",
+  "metadata": {
+    "name": "blogapp-eks",
+    "region": "ap-south-1"
+  },
+  "availabilityZones": [
+    "ap-south-1a",
+    "ap-south-1b"
+  ],
+  "iam": {
+    "withOIDC": true
+  },
+  "accessConfig": {
+    "authenticationMode": "API_AND_CONFIG_MAP"
+  },
+  "vpc": {
+    "clusterEndpoints": {
+      "publicAccess": false,
+      "privateAccess": true
+    }
+  },
+  "managedNodeGroups": [
+    {
+      "name": "application",
+      "instanceType": "t3.large",
+      "minSize": 2,
+      "desiredCapacity": 2,
+      "maxSize": 4,
+      "privateNetworking": true,
+      "volumeEncrypted": true,
+      "disableIMDSv1": true
+    }
+  ],
+  "addons": [
+    {
+      "name": "vpc-cni",
+      "configurationValues": "{\"enableNetworkPolicy\": \"true\"}",
+      "attachPolicyARNs": [
+        "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+      ]
+    },
+    {
+      "name": "coredns"
+    },
+    {
+      "name": "kube-proxy"
+    },
+    {
+      "name": "metrics-server"
+    },
+    {
+      "name": "aws-ebs-csi-driver",
+      "attachPolicyARNs": [
+        "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicyV2"
+      ]
+    }
+  ]
+}

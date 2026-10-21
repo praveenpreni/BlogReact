@@ -1,0 +1,11 @@
+{
+  "apiVersion": "v1",
+  "kind": "ConfigMap",
+  "metadata": {
+    "name": "mysql-init",
+    "namespace": "blogapp"
+  },
+  "data": {
+    "init.sql": "-- Blog App schema\nCREATE DATABASE IF NOT EXISTS blogdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;\nUSE blogdb;\n\nCREATE TABLE IF NOT EXISTS users (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  name VARCHAR(120) NOT NULL,\n  email VARCHAR(190) NOT NULL UNIQUE,\n  password_hash VARCHAR(255) NOT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n) ENGINE=InnoDB;\n\nCREATE TABLE IF NOT EXISTS posts (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  title VARCHAR(255) NOT NULL,\n  slug VARCHAR(280) NOT NULL UNIQUE,\n  body MEDIUMTEXT NOT NULL,\n  excerpt VARCHAR(300),\n  cover_image VARCHAR(500),\n  tag VARCHAR(60) DEFAULT 'general',\n  read_minutes INT DEFAULT 1,\n  status ENUM('draft','published') DEFAULT 'published',\n  author_id INT NOT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE,\n  INDEX idx_tag (tag),\n  INDEX idx_created (created_at)\n) ENGINE=InnoDB;\n\nCREATE TABLE IF NOT EXISTS comments (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  post_id INT NOT NULL,\n  author_id INT NOT NULL,\n  body VARCHAR(1000) NOT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,\n  FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE\n) ENGINE=InnoDB;\n\n"
+  }
+}

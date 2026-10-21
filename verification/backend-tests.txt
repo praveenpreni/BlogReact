@@ -1,0 +1,37 @@
+127.0.0.1 - - [21/Oct/2026:14:24:25 +0000] "GET /healthz HTTP/1.1" 200 15 "-" "-"
+✔ liveness is independent of database (73.3387ms)
+127.0.0.1 - - [21/Oct/2026:14:24:25 +0000] "GET /readyz HTTP/1.1" 503 53 "-" "-"
+✔ readiness rejects unavailable database without leaking details (12.0669ms)
+127.0.0.1 - - [21/Oct/2026:14:24:25 +0000] "GET /readyz HTTP/1.1" 200 18 "-" "-"
+✔ readiness succeeds with database (8.9291ms)
+127.0.0.1 - - [21/Oct/2026:14:24:25 +0000] "POST /api/posts HTTP/1.1" 401 35 "-" "-"
+✔ anonymous users cannot create posts (38.3503ms)
+127.0.0.1 - - [21/Oct/2026:14:24:25 +0000] "POST /api/auth/register HTTP/1.1" 400 300 "-" "-"
+✔ invalid registration does not query database (14.2888ms)
+127.0.0.1 - - [21/Oct/2026:14:24:25 +0000] "POST /api/auth/login HTTP/1.1" 401 31 "-" "-"
+✔ unknown account cannot log in (8.7ms)
+127.0.0.1 - - [21/Oct/2026:14:24:25 +0000] "GET /api/posts HTTP/1.1" 200 88 "-" "-"
+✔ posts are returned from persistence layer (5.9373ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1874.9475
+ℹ start of coverage report
+ℹ ------------------------------------------------------------------------------------
+ℹ file         | line % | branch % | funcs % | uncovered lines
+ℹ ------------------------------------------------------------------------------------
+ℹ src          |        |          |         | 
+ℹ  middleware  |        |          |         | 
+ℹ   auth.js    |  45.71 |    40.00 |   50.00 | 13-19 22-33
+ℹ  routes      |        |          |         | 
+ℹ   auth.js    |  51.39 |    50.00 |  100.00 | 20-39 54-68
+ℹ   posts.js   |  45.11 |    40.00 |   25.00 | 19-21 23-25 44-46 51-70 83-110 115-130
+ℹ  server.js   |  87.80 |    75.00 |   44.44 | 63-64 68-69 75-80
+ℹ ------------------------------------------------------------------------------------
+ℹ all files    |  57.45 |    54.17 |   47.06 | 
+ℹ ------------------------------------------------------------------------------------
+ℹ end of coverage report

@@ -1,10 +1,12 @@
 const mysql = require('mysql2/promise');
 
+if (!process.env.DB_PASSWORD) throw new Error('DB_PASSWORD is required');
+
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'mysql-service',
   port: process.env.DB_PORT || 3306,
   user: process.env.DB_USER || 'bloguser',
-  password: process.env.DB_PASSWORD || 'changeme',
+  password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME || 'blogdb',
   waitForConnections: true,
   connectionLimit: 10,

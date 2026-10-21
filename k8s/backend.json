@@ -1,0 +1,131 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "backend",
+    "namespace": "blogapp"
+  },
+  "spec": {
+    "replicas": 2,
+    "revisionHistoryLimit": 5,
+    "progressDeadlineSeconds": 300,
+    "strategy": {
+      "type": "RollingUpdate",
+      "rollingUpdate": {
+        "maxUnavailable": 0,
+        "maxSurge": 1
+      }
+    },
+    "selector": {
+      "matchLabels": {
+        "app": "backend"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "backend"
+        }
+      },
+      "spec": {
+        "automountServiceAccountToken": false,
+        "terminationGracePeriodSeconds": 30,
+        "topologySpreadConstraints": [
+          {
+            "maxSkew": 1,
+            "topologyKey": "kubernetes.io/hostname",
+            "whenUnsatisfiable": "ScheduleAnyway",
+            "labelSelector": {
+              "matchLabels": {
+                "app": "backend"
+              }
+            }
+          }
+        ],
+        "containers": [
+          {
+            "name": "backend",
+            "image": "REPLACE_ECR/blogapp-backend:REPLACE_TAG",
+            "ports": [
+              {
+                "name": "http",
+                "containerPort": 5000
+              }
+            ],
+            "securityContext": {
+              "runAsNonRoot": true,
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              },
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              }
+            },
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "500m",
+                "memory": "256Mi"
+              }
+            },
+            "readinessProbe": {
+              "httpGet": {
+                "path": "/readyz",
+                "port": 5000
+              },
+              "periodSeconds": 5
+            },
+            "livenessProbe": {
+              "httpGet": {
+                "path": "/healthz",
+                "port": 5000
+              },
+              "periodSeconds": 10
+            },
+            "startupProbe": {
+              "httpGet": {
+                "path": "/healthz",
+                "port": 5000
+              },
+              "failureThreshold": 30,
+              "periodSeconds": 5
+            },
+            "envFrom": [
+              {
+                "configMapRef": {
+                  "name": "backend-config"
+                }
+              }
+            ],
+            "env": [
+              {
+                "name": "DB_PASSWORD",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "blog-secrets",
+                    "key": "DB_PASSWORD"
+                  }
+                }
+              },
+              {
+                "name": "JWT_SECRET",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "blog-secrets",
+                    "key": "JWT_SECRET"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

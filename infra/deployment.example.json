@@ -1,0 +1,16 @@
+{
+  "clusterName": "blogapp-eks",
+  "region": "ap-south-1",
+  "kubernetesVersion": "CHOOSE_SUPPORTED_VERSION",
+  "domain": "blog.YOUR_DOMAIN",
+  "hostedZoneId": "YOUR_ROUTE53_ZONE_ID",
+  "jenkinsRoleArn": "arn:aws:iam::YOUR_ACCOUNT_ID:role/YOUR_JENKINS_ROLE",
+  "secretId": "blogapp/application",
+  "imageTag": "YOUR_SCANNED_RELEASE_TAG",
+  "albChartVersion": "CHOOSE_REVIEWED_CHART_VERSION",
+  "prometheusChartVersion": "CHOOSE_REVIEWED_CHART_VERSION",
+  "gatewayApiVersion": "CHOOSE_COMPATIBLE_GATEWAY_API_VERSION",
+  "nexusUrl": "https://YOUR_NEXUS/repository/blog-releases",
+  "nexusDockerRegistry": "YOUR_NEXUS_DOCKER_TLS_HOST:PORT",
+  "repositoryUrl": "https://github.com/YOUR_OWNER/YOUR_REPOSITORY.git"
+}

@@ -1,0 +1,42 @@
+{
+  "apiVersion": "monitoring.coreos.com/v1",
+  "kind": "PrometheusRule",
+  "metadata": {
+    "name": "blog-alerts",
+    "namespace": "monitoring",
+    "labels": {
+      "release": "monitoring"
+    }
+  },
+  "spec": {
+    "groups": [
+      {
+        "name": "blog",
+        "rules": [
+          {
+            "alert": "BlogBackendUnavailable",
+            "expr": "sum(up{namespace=\"blogapp\",service=\"backend-service\"}) < 1 or absent(up{namespace=\"blogapp\",service=\"backend-service\"})",
+            "for": "2m",
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "summary": "Blog backend scrape unavailable"
+            }
+          },
+          {
+            "alert": "BlogPodRestarts",
+            "expr": "sum by (pod) (increase(kube_pod_container_status_restarts_total{namespace=\"blogapp\"}[10m])) > 3",
+            "for": "5m",
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "summary": "Blog pod repeatedly restarting"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
