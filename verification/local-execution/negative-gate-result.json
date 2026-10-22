@@ -1,0 +1,7 @@
+{
+  "result": "FAILURE",
+  "expectedFailure": true,
+  "highCriticalFindings": 2,
+  "fixture": "Lockfile only, lodash 4.17.20; no package installed or executed",
+  "url": "http://localhost:18080/job/BlogApp-Local-Gate-Rejection/1/"
+}

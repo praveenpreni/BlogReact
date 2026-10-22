@@ -11,3 +11,7 @@ Updated 21 October 2026
 - Container builds, image scans, cloud deployment and live application proof require live execution.
 
 Configuration mapping is documented in docs/configuration.md. The Jenkins pipeline now publishes scanned images to both ECR and Nexus. The cluster template declares EBS CSI, metrics-server and CNI network policies. scripts/bootstrap.py automates remaining platform and application setup. It has not yet been executed against AWS.
+
+## Local execution on 22 October 2026
+
+See local-execution/ and docs/local-demo.md for the actual successful Jenkins build, Trivy dependency scan, real MySQL smoke operations, restart persistence and independent restore records. Container/image and cloud acceptance remain pending.

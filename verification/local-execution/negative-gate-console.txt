@@ -1,0 +1,13 @@
+Started by user demo-admin
+Running as SYSTEM
+Building in workspace C:\Users\pravn\Documents\Codex\2026-10-21\it\work\local-demo\jenkins-home\workspace\BlogApp-Local-Gate-Rejection
+[BlogApp-Local-Gate-Rejection] $ cmd /c call C:\Users\pravn\AppData\Local\Packages\sandbox.{1412f721-d4ae-4a61-8853-be7d9728b47a}\AC\Temp\jenkins7417349986239141172.bat
+
+C:\Users\pravn\Documents\Codex\2026-10-21\it\work\local-demo\jenkins-home\workspace\BlogApp-Local-Gate-Rejection>set "DOCKER_CONFIG=C:\Users\pravn\Documents\Codex\2026-10-21\it\work\local-demo\docker-public-config" 
+
+C:\Users\pravn\Documents\Codex\2026-10-21\it\work\local-demo\jenkins-home\workspace\BlogApp-Local-Gate-Rejection>"C:\Users\pravn\Documents\Codex\2026-10-21\it\work\tools\trivy\trivy.exe" filesystem --quiet --scanners vuln --include-dev-deps --severity HIGH,CRITICAL --exit-code 1 --cache-dir "C:\Users\pravn\Documents\Codex\2026-10-21\it\work\local-demo\trivy-cache" --format json --output rejected-scan.json "C:\Users\pravn\Documents\Codex\2026-10-21\it\work\local-demo\vulnerable-lockfile-fixture" 
+
+C:\Users\pravn\Documents\Codex\2026-10-21\it\work\local-demo\jenkins-home\workspace\BlogApp-Local-Gate-Rejection>if errorlevel 1 exit /b 1 
+Build step 'Execute Windows batch command' marked build as failure
+Archiving artifacts
+Finished: FAILURE

@@ -1,0 +1,15 @@
+{
+  "verifiedAt": "2026-10-22T11:06:43.538452+00:00",
+  "url": "http://localhost:3000/api/posts/local-execution-and-persistence-proof-22-october-2026-mvjfk8mh",
+  "postIdBefore": 1,
+  "postIdAfter": 1,
+  "title": "Local execution and persistence proof \u2014 22 October 2026",
+  "commentsBefore": 1,
+  "commentsAfter": 1,
+  "sameContentAndComments": true,
+  "readinessWhileDatabaseStopped": 503,
+  "livenessWhileDatabaseStopped": 200,
+  "recoverySeconds": 2.09,
+  "storage": "Same isolated MySQL data directory; no reinitialization or schema import on restart",
+  "result": "PASS"
+}

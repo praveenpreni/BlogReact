@@ -1,0 +1,87 @@
+Started by user demo-admin
+Running as SYSTEM
+Building in workspace C:\Users\pravn\Documents\Codex\2026-10-21\it\work\BlogReact
+[BlogReact] $ cmd /c call C:\Users\pravn\AppData\Local\Packages\sandbox.{1412f721-d4ae-4a61-8853-be7d9728b47a}\AC\Temp\jenkins14943622435459677769.bat
+
+C:\Users\pravn\Documents\Codex\2026-10-21\it\work\BlogReact>set "DEMO_TRIVY_PATH=C:\Users\pravn\Documents\Codex\2026-10-21\it\work\tools\trivy\trivy.exe" 
+
+C:\Users\pravn\Documents\Codex\2026-10-21\it\work\BlogReact>set "TRIVY_CACHE_DIR=C:\Users\pravn\Documents\Codex\2026-10-21\it\work\local-demo\trivy-cache" 
+
+C:\Users\pravn\Documents\Codex\2026-10-21\it\work\BlogReact>set "DOCKER_CONFIG=C:\Users\pravn\Documents\Codex\2026-10-21\it\work\local-demo\docker-public-config" 
+
+C:\Users\pravn\Documents\Codex\2026-10-21\it\work\BlogReact>"C:/Users/pravn/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe" "C:\Users\pravn\Documents\Codex\2026-10-21\it\work\BlogReact\ops\local-ci.py" 
+
+=== Backend tests ===
+127.0.0.1 - - [22/Oct/2026:11:11:00 +0000] "GET /healthz HTTP/1.1" 200 15 "-" "-"
+✔ liveness is independent of database (52.9571ms)
+127.0.0.1 - - [22/Oct/2026:11:11:01 +0000] "GET /readyz HTTP/1.1" 503 53 "-" "-"
+✔ readiness rejects unavailable database without leaking details (7.6323ms)
+127.0.0.1 - - [22/Oct/2026:11:11:01 +0000] "GET /readyz HTTP/1.1" 200 18 "-" "-"
+✔ readiness succeeds with database (3.4903ms)
+127.0.0.1 - - [22/Oct/2026:11:11:01 +0000] "POST /api/posts HTTP/1.1" 401 35 "-" "-"
+✔ anonymous users cannot create posts (304.9788ms)
+127.0.0.1 - - [22/Oct/2026:11:11:01 +0000] "POST /api/auth/register HTTP/1.1" 400 300 "-" "-"
+✔ invalid registration does not query database (10.7006ms)
+127.0.0.1 - - [22/Oct/2026:11:11:01 +0000] "POST /api/auth/login HTTP/1.1" 401 31 "-" "-"
+✔ unknown account cannot log in (5.0764ms)
+127.0.0.1 - - [22/Oct/2026:11:11:01 +0000] "GET /api/posts HTTP/1.1" 200 88 "-" "-"
+✔ posts are returned from persistence layer (4.5424ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15196.1266
+ℹ start of coverage report
+ℹ ------------------------------------------------------------------------------------
+ℹ file         | line % | branch % | funcs % | uncovered lines
+ℹ ------------------------------------------------------------------------------------
+ℹ src          |        |          |         | 
+ℹ  middleware  |        |          |         | 
+ℹ   auth.js    |  45.71 |    40.00 |   50.00 | 13-19 22-33
+ℹ  routes      |        |          |         | 
+ℹ   auth.js    |  51.39 |    50.00 |  100.00 | 20-39 54-68
+ℹ   posts.js   |  45.11 |    40.00 |   25.00 | 19-21 23-25 44-46 51-70 83-110 115-130
+ℹ  server.js   |  87.80 |    75.00 |   44.44 | 63-64 68-69 75-80
+ℹ ------------------------------------------------------------------------------------
+ℹ all files    |  57.45 |    54.17 |   47.06 | 
+ℹ ------------------------------------------------------------------------------------
+ℹ end of coverage report
+
+=== Frontend tests ===
+✔ post listing uses same origin API and encodes query (2.9732ms)
+✔ API errors reach caller (0.4851ms)
+✔ authenticated creation uses bearer token (0.2398ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 128.7794
+
+=== Frontend production build ===
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 33 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.95 kB │ gzip:  0.49 kB
+dist/assets/index-osMMORaN.css    7.67 kB │ gzip:  2.26 kB
+dist/assets/index-nQt1e6Rd.js   190.90 kB │ gzip: 62.25 kB
+
+✓ built in 1.28s
+
+=== Trivy dependency gate (HIGH and CRITICAL) ===
+
+=== Real MySQL application smoke test ===
+Register, create, read and comment passed. Persistence URL: http://localhost:3000/api/posts/persistence-proof-mvjfxfgy
+
+LOCAL CI PASSED: tests, build, Trivy dependency gate, registration, post, read and comment. Docker and EKS were not executed.
+
+C:\Users\pravn\Documents\Codex\2026-10-21\it\work\BlogReact>exit 0 
+Archiving artifacts
+Finished: SUCCESS

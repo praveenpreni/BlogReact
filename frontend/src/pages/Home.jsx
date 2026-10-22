@@ -42,7 +42,7 @@ export default function Home() {
             </div>
             <div>
               <strong>Trivy</strong>
-              gate on every image
+              configured image gate
             </div>
           </div>
         </div>

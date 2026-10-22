@@ -1,5 +1,12 @@
 # Blog application on Amazon EKS
 
+## Execution evidence - local demonstration
+
+**22 October 2026:** [Open the screenshot report](docs/Local_Execution_Report.pdf), [browse execution screenshots](docs/execution-evidence/), or inspect [raw Jenkins, scan and database results](verification/local-execution/).
+
+The native local run demonstrated a successful Jenkins build, 10 passing tests, a production frontend build, a blocking Trivy dependency gate, real React/Express/MySQL operations, database restart persistence, and backup restoration. A separate vulnerable lockfile fixture was rejected by the gate. [Scope and reproduction details](docs/local-demo.md). Docker images, SonarQube, Nexus/ECR and EKS deployment remain unexecuted; this is not a complete cloud deployment.
+
+
 Repository: https://github.com/praveenpreni/BlogReact
 
 React frontend, Express API and persistent MySQL, with Docker builds, Jenkins delivery, SonarQube, Trivy, images in both Nexus and ECR, and Prometheus/Grafana resources.

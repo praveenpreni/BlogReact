@@ -1,0 +1,10 @@
+{
+  "verifiedAt": "2026-10-22T11:09:01.970713+00:00",
+  "backup": "Consistent mysqldump of isolated blogdb; private SQL retained locally only",
+  "restoreTarget": "Separate blogdb_restore database",
+  "sourceCountsUsersPostsComments": "2\t2\t2",
+  "restoredCountsUsersPostsComments": "2\t2\t2",
+  "sameProofPostTitleAndBody": true,
+  "elapsedSeconds": 0.91,
+  "result": "PASS"
+}
