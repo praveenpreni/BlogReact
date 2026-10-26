@@ -66,11 +66,11 @@ else:
 def persist():secretfile.write_text(json.dumps(values));secretfile.chmod(0o600)
 
 services={'name':'blog-ci','services':{
- 'postgres':{'image':'postgres:17-alpine','environment':{'POSTGRES_DB':'sonar','POSTGRES_USER':'sonar','POSTGRES_PASSWORD':values['postgresPassword']},'volumes':['postgres-data:/var/lib/postgresql/data'],'healthcheck':{'test':['CMD-SHELL','pg_isready -U sonar -d sonar'],'interval':'5s','timeout':'3s','retries':30}},
- 'sonarqube':{'image':'sonarqube:lts-community','environment':{'SONAR_JDBC_URL':'jdbc:postgresql://postgres:5432/sonar','SONAR_JDBC_USERNAME':'sonar','SONAR_JDBC_PASSWORD':values['postgresPassword']},'depends_on':{'postgres':{'condition':'service_healthy'}},'ports':['127.0.0.1:9000:9000'],'volumes':['sonar-data:/opt/sonarqube/data','sonar-extensions:/opt/sonarqube/extensions','sonar-logs:/opt/sonarqube/logs'],'ulimits':{'nofile':{'soft':131072,'hard':131072},'nproc':8192}},
+ 'postgres':{'image':'postgres:17-alpine','environment':{'POSTGRES_DB':'sonar','POSTGRES_USER':'sonar','POSTGRES_PASSWORD':values['postgresPassword']},'volumes':['postgres-current-data:/var/lib/postgresql/data'],'healthcheck':{'test':['CMD-SHELL','pg_isready -U sonar -d sonar'],'interval':'5s','timeout':'3s','retries':30}},
+ 'sonarqube':{'image':'sonarqube:community','environment':{'SONAR_JDBC_URL':'jdbc:postgresql://postgres:5432/sonar','SONAR_JDBC_USERNAME':'sonar','SONAR_JDBC_PASSWORD':values['postgresPassword']},'depends_on':{'postgres':{'condition':'service_healthy'}},'ports':['127.0.0.1:9000:9000'],'volumes':['sonar-current-data:/opt/sonarqube/data','sonar-current-extensions:/opt/sonarqube/extensions','sonar-current-logs:/opt/sonarqube/logs'],'ulimits':{'nofile':{'soft':131072,'hard':131072},'nproc':8192}},
  'nexus':{'image':'sonatype/nexus3:latest','ports':['127.0.0.1:8081:8081'],'volumes':['nexus-data:/nexus-data'],'environment':{'INSTALL4J_ADD_VM_PARAMS':'-Xms1200m -Xmx1200m -XX:MaxDirectMemorySize=1200m'}},
  'registry':{'image':'nginx:stable-alpine','ports':['127.0.0.1:5000:5000','127.0.0.1:8443:8443'],'volumes':['./nginx.conf:/etc/nginx/nginx.conf:ro','./tls:/tls:ro'],'depends_on':['nexus'],'networks':{'default':{'aliases':['nexus.registry.internal']}}}
-},'volumes':{k:{} for k in ['sonar-data','sonar-extensions','sonar-logs','nexus-data','jenkins-data','postgres-data']}}
+},'volumes':{k:{} for k in ['sonar-current-data','sonar-current-extensions','sonar-current-logs','nexus-data','jenkins-data','postgres-current-data']}}
 (ROOT/'compose.json').write_text(json.dumps(services,indent=2))
 cmd(['docker','compose','-f','compose.json','up','-d'])
 wait('http://127.0.0.1:8081/service/rest/v1/status');wait('http://127.0.0.1:9000/api/system/status')
@@ -138,7 +138,7 @@ docker_gid=Path('/var/run/docker.sock').stat().st_gid
 services['services']['jenkins']={'image':'blogapp-jenkins:local','ports':['127.0.0.1:8080:8080'],'environment':{'JAVA_OPTS':'-Xms256m -Xmx1536m -Djenkins.install.runSetupWizard=false','CASC_JENKINS_CONFIG':'/var/jenkins_home/casc.json','AWS_DEFAULT_REGION':'ap-south-1'},'volumes':['jenkins-data:/var/jenkins_home','/var/run/docker.sock:/var/run/docker.sock','./jenkins-casc.json:/var/jenkins_home/casc.json:ro'],'group_add':[str(docker_gid)]}
 # JCasC is readable only by the container user and host administrators.
 cmd(['chown','1000:1000',str(ROOT/'jenkins-casc.json')])
-(ROOT/'compose.json').write_text(json.dumps(services,indent=2));cmd(['docker','compose','-f','compose.json','up','-d','jenkins'])
+(ROOT/'compose.json').write_text(json.dumps(services,indent=2));cmd(['docker','compose','-f','compose.json','up','-d','--force-recreate','jenkins'])
 wait('http://127.0.0.1:8080/login')
 (ROOT/'component-images.json').write_text(cmd(['docker','image','ls','--digests','--format','json']))
 (ROOT/'ci-ready').write_text('ready\n')
