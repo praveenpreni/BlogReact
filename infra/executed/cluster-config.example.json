@@ -1,0 +1,76 @@
+{
+  "apiVersion": "eksctl.io/v1alpha5",
+  "kind": "ClusterConfig",
+  "metadata": {
+    "name": "blogapp-eks",
+    "region": "ap-south-1",
+    "version": "1.35",
+    "tags": {
+      "Project": "BlogApp",
+      "ManagedBy": "eksctl",
+      "Owner": "userno1_100",
+      "Deployment": "20261026"
+    }
+  },
+  "availabilityZones": [
+    "ap-south-1a",
+    "ap-south-1b"
+  ],
+  "iam": {
+    "withOIDC": true
+  },
+  "accessConfig": {
+    "authenticationMode": "API_AND_CONFIG_MAP"
+  },
+  "vpc": {
+    "clusterEndpoints": {
+      "publicAccess": true,
+      "privateAccess": true
+    },
+    "publicAccessCIDRs": [
+      "REPLACE_OPERATOR_IPV4/32"
+    ],
+    "nat": {
+      "gateway": "Single"
+    }
+  },
+  "managedNodeGroups": [
+    {
+      "name": "application",
+      "instanceType": "t3.large",
+      "minSize": 2,
+      "desiredCapacity": 2,
+      "maxSize": 2,
+      "privateNetworking": true,
+      "volumeEncrypted": true,
+      "disableIMDSv1": true,
+      "volumeSize": 30,
+      "volumeType": "gp3",
+      "amiFamily": "AmazonLinux2023"
+    }
+  ],
+  "addons": [
+    {
+      "name": "vpc-cni",
+      "configurationValues": "{\"enableNetworkPolicy\": \"true\"}",
+      "attachPolicyARNs": [
+        "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+      ]
+    },
+    {
+      "name": "coredns"
+    },
+    {
+      "name": "kube-proxy"
+    },
+    {
+      "name": "metrics-server"
+    },
+    {
+      "name": "aws-ebs-csi-driver",
+      "attachPolicyARNs": [
+        "arn:aws:iam::aws:policy/AmazonEBSCSIDriverPolicyV2"
+      ]
+    }
+  ]
+}

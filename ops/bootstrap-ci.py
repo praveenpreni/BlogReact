@@ -65,10 +65,14 @@ else:
  values={k:secrets.token_urlsafe(30) for k in ['nexusAdminPassword','nexusDeployPassword','sonarAdminPassword','jenkinsAdminPassword','sonarWebhookSecret','postgresPassword']};secretfile.write_text(json.dumps(values));secretfile.chmod(0o600)
 def persist():secretfile.write_text(json.dumps(values));secretfile.chmod(0o600)
 
+# Store the Nexus encryption key separately from source and container images.
+nexus_keys=ROOT/'nexus-secrets.json'
+if not nexus_keys.exists():nexus_keys.write_text(json.dumps({'active':'blog-ci-key','keys':[{'id':'blog-ci-key','key':secrets.token_urlsafe(48)}]}))
+nexus_keys.chmod(0o600);cmd(['chown','200:200',str(nexus_keys)])
 services={'name':'blog-ci','services':{
  'postgres':{'image':'postgres:17-alpine','environment':{'POSTGRES_DB':'sonar','POSTGRES_USER':'sonar','POSTGRES_PASSWORD':values['postgresPassword']},'volumes':['postgres-current-data:/var/lib/postgresql/data'],'healthcheck':{'test':['CMD-SHELL','pg_isready -U sonar -d sonar'],'interval':'5s','timeout':'3s','retries':30}},
  'sonarqube':{'image':'sonarqube:community','environment':{'SONAR_JDBC_URL':'jdbc:postgresql://postgres:5432/sonar','SONAR_JDBC_USERNAME':'sonar','SONAR_JDBC_PASSWORD':values['postgresPassword']},'depends_on':{'postgres':{'condition':'service_healthy'}},'ports':['127.0.0.1:9000:9000'],'volumes':['sonar-current-data:/opt/sonarqube/data','sonar-current-extensions:/opt/sonarqube/extensions','sonar-current-logs:/opt/sonarqube/logs'],'ulimits':{'nofile':{'soft':131072,'hard':131072},'nproc':8192}},
- 'nexus':{'image':'sonatype/nexus3:latest','ports':['127.0.0.1:8081:8081'],'volumes':['nexus-data:/nexus-data'],'environment':{'INSTALL4J_ADD_VM_PARAMS':'-Xms1200m -Xmx1200m -XX:MaxDirectMemorySize=1200m'}},
+ 'nexus':{'image':'sonatype/nexus3:latest','ports':['127.0.0.1:8081:8081'],'volumes':['nexus-data:/nexus-data','./nexus-secrets.json:/run/nexus-secrets.json:ro'],'environment':{'NEXUS_SECRETS_KEY_FILE':'/run/nexus-secrets.json','INSTALL4J_ADD_VM_PARAMS':'-Xms1200m -Xmx1200m -XX:MaxDirectMemorySize=1200m'}},
  'registry':{'image':'nginx:stable-alpine','ports':['127.0.0.1:5000:5000','127.0.0.1:8443:8443'],'volumes':['./nginx.conf:/etc/nginx/nginx.conf:ro','./tls:/tls:ro'],'depends_on':['nexus'],'networks':{'default':{'aliases':['nexus.registry.internal']}}}
 },'volumes':{k:{} for k in ['sonar-current-data','sonar-current-extensions','sonar-current-logs','nexus-data','jenkins-data','postgres-current-data']}}
 (ROOT/'compose.json').write_text(json.dumps(services,indent=2))
@@ -96,11 +100,14 @@ if not values.get('nexusConfigured'):
  if not any(r['id']=='blog-deployer' for r in n('/service/rest/v1/security/roles',method='GET')):n('/service/rest/v1/security/roles',{'id':'blog-deployer','name':'Blog release deployer','description':'Read and publish only BlogApp repositories','privileges':privileges,'roles':[]})
  if not any(u['userId']=='blog-deployer' for u in n('/service/rest/v1/security/users',method='GET')):n('/service/rest/v1/security/users',{'userId':'blog-deployer','firstName':'Blog','lastName':'Pipeline','emailAddress':'pipeline@example.invalid','password':values['nexusDeployPassword'],'status':'active','roles':['blog-deployer']})
  values['nexusConfigured']=True;persist()
+if not values.get('nexusEncryptionConfigured'):
+ request('http://127.0.0.1:8081','admin',values['nexusAdminPassword'],'/service/rest/v1/secrets/encryption/re-encrypt',method='PUT',body={'secretKeyId':'blog-ci-key'})
+ values['nexusEncryptionConfigured']=True;persist()
 if not values.get('sonarToken'):
  if not values.get('sonarPasswordChanged'):
   request('http://127.0.0.1:9000','admin','admin','/api/users/change_password',params={'login':'admin','previousPassword':'admin','password':values['sonarAdminPassword']});values['sonarPasswordChanged']=True;persist()
  values['sonarToken']=request('http://127.0.0.1:9000','admin',values['sonarAdminPassword'],'/api/user_tokens/generate',params={'name':'blogapp-jenkins'})['token'];persist()
- # Initial project creation and authenticated webhook back to Jenkins over the private Docker network.
+ # Create the project; the private pipeline polls its analysis-specific gate.
  request('http://127.0.0.1:9000','admin',values['sonarAdminPassword'],'/api/projects/create',params={'name':'Blog Application','project':'blogapp'})
 print('Nexus and SonarQube configured. Credentials remain in protected host storage.',flush=True)
 # Build a dedicated Jenkins image using official tool distributions.

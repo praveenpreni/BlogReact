@@ -1,0 +1,8 @@
+{
+  "applicationUrl": "https://1c3j649rgg.execute-api.ap-south-1.amazonaws.com",
+  "apiId": "1c3j649rgg",
+  "vpcLinkId": "hnuiro",
+  "albArn": "arn:aws:elasticloadbalancing:ap-south-1:782610231927:loadbalancer/app/blogapp-private-alb/8187633bb428ac3a",
+  "ingress": "blogapp",
+  "region": "ap-south-1"
+}

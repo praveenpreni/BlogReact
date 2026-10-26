@@ -16,3 +16,6 @@ evidence/
 .bootstrap/
 __pycache__/
 *.pyc
+.deployment-state/
+*private.sql
+nexus-secrets.json

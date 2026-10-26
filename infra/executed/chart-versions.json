@@ -1,0 +1,10 @@
+{
+  "eks/aws-load-balancer-controller": {
+    "chartVersion": "3.6.2",
+    "appVersion": "v3.6.2"
+  },
+  "prometheus-community/kube-prometheus-stack": {
+    "chartVersion": "92.14.0",
+    "appVersion": "v0.94.2"
+  }
+}

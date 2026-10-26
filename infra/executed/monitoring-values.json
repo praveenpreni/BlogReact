@@ -1,0 +1,91 @@
+{
+  "kubeControllerManager": {
+    "enabled": false
+  },
+  "kubeScheduler": {
+    "enabled": false
+  },
+  "kubeEtcd": {
+    "enabled": false
+  },
+  "kubeProxy": {
+    "enabled": false
+  },
+  "prometheus": {
+    "prometheusSpec": {
+      "retention": "2d",
+      "storageSpec": {
+        "volumeClaimTemplate": {
+          "spec": {
+            "storageClassName": "blog-gp3",
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "resources": {
+              "requests": {
+                "storage": "15Gi"
+              }
+            }
+          }
+        }
+      },
+      "resources": {
+        "requests": {
+          "cpu": "200m",
+          "memory": "768Mi"
+        },
+        "limits": {
+          "memory": "2Gi"
+        }
+      }
+    }
+  },
+  "grafana": {
+    "admin": {
+      "existingSecret": "grafana-admin",
+      "userKey": "admin-user",
+      "passwordKey": "admin-password"
+    },
+    "persistence": {
+      "enabled": true,
+      "storageClassName": "blog-gp3",
+      "size": "5Gi"
+    },
+    "resources": {
+      "requests": {
+        "cpu": "100m",
+        "memory": "128Mi"
+      },
+      "limits": {
+        "memory": "512Mi"
+      }
+    }
+  },
+  "alertmanager": {
+    "alertmanagerSpec": {
+      "storage": {
+        "volumeClaimTemplate": {
+          "spec": {
+            "storageClassName": "blog-gp3",
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "resources": {
+              "requests": {
+                "storage": "2Gi"
+              }
+            }
+          }
+        }
+      },
+      "resources": {
+        "requests": {
+          "memory": "64Mi"
+        },
+        "limits": {
+          "memory": "256Mi"
+        }
+      }
+    }
+  }
+}

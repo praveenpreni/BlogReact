@@ -1,3 +1,5 @@
+[Executed API Gateway/private-ALB architecture](Cloud_Deployment.md). The domain/ACM procedure below is the alternative reusable setup.
+
 # Deployment execution order
 
 1. Sign into AWS with a short-lived identity. Use a trusted Linux host with private access to the EKS API and installed AWS CLI, eksctl, kubectl, Helm, Docker, Trivy and Python 3. A normal public CloudShell session cannot reach a private EKS API; use a VPC CloudShell environment or an in-VPC administration host.
