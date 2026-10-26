@@ -4,7 +4,8 @@
   "metadata": {
     "name": "blogapp",
     "labels": {
-      "pod-security.kubernetes.io/enforce": "baseline"
+      "pod-security.kubernetes.io/enforce": "baseline",
+      "elbv2.k8s.aws/pod-readiness-gate-inject": "enabled"
     }
   }
 }

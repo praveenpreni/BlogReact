@@ -10,7 +10,11 @@
       "alb.ingress.kubernetes.io/certificate-arn": "REPLACE_ACM_ARN",
       "alb.ingress.kubernetes.io/listen-ports": "[{\"HTTP\":80},{\"HTTPS\":443}]",
       "alb.ingress.kubernetes.io/ssl-redirect": "443",
-      "alb.ingress.kubernetes.io/healthcheck-path": "/healthz"
+      "alb.ingress.kubernetes.io/healthcheck-path": "/healthz",
+      "alb.ingress.kubernetes.io/target-group-attributes": "deregistration_delay.timeout_seconds=20",
+      "alb.ingress.kubernetes.io/healthcheck-interval-seconds": "10",
+      "alb.ingress.kubernetes.io/healthy-threshold-count": "2",
+      "alb.ingress.kubernetes.io/unhealthy-threshold-count": "2"
     }
   },
   "spec": {

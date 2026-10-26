@@ -29,7 +29,7 @@
       },
       "spec": {
         "automountServiceAccountToken": false,
-        "terminationGracePeriodSeconds": 30,
+        "terminationGracePeriodSeconds": 60,
         "topologySpreadConstraints": [
           {
             "maxSkew": 1,
@@ -95,6 +95,17 @@
               },
               "failureThreshold": 30,
               "periodSeconds": 5
+            },
+            "lifecycle": {
+              "preStop": {
+                "exec": {
+                  "command": [
+                    "/bin/sh",
+                    "-c",
+                    "sleep 25"
+                  ]
+                }
+              }
             }
           }
         ]
