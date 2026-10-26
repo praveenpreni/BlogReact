@@ -1,6 +1,6 @@
 pipeline {
  agent { label 'blog-ci' }
- options { timestamps(); disableConcurrentBuilds(); timeout(time: 45, unit: 'MINUTES') }
+ options { disableConcurrentBuilds(); timeout(time: 45, unit: 'MINUTES') }
  parameters {
   string(name: 'AWS_REGION', defaultValue: 'ap-south-1')
   string(name: 'EKS_CLUSTER', defaultValue: 'blogapp-eks')
@@ -26,13 +26,16 @@ pipeline {
    done
    exit "$scan_status"
   ''' } }
-  stage('Nexus release archive') { when { branch 'main' } steps { withCredentials([usernamePassword(credentialsId:'nexus-creds',usernameVariable:'NEXUS_USER',passwordVariable:'NEXUS_PASSWORD')]) { sh '''
+  stage('Nexus release archive') { when { branch 'main' }
+   steps { withCredentials([usernamePassword(credentialsId:'nexus-creds',usernameVariable:'NEXUS_USER',passwordVariable:'NEXUS_PASSWORD')]) { sh '''
    set -eu
    git archive --format=tar.gz --output="reports/blog-$IMAGE_TAG.tgz" HEAD
    curl --fail --silent --show-error --user "$NEXUS_USER:$NEXUS_PASSWORD" --upload-file "reports/blog-$IMAGE_TAG.tgz" "$NEXUS_URL/blog-$IMAGE_TAG.tgz"
   ''' } } }
-  stage('Publish to ECR and Nexus') { when { branch 'main' } steps { withCredentials([usernamePassword(credentialsId:'nexus-creds',usernameVariable:'NEXUS_USER',passwordVariable:'NEXUS_PASSWORD')]) { sh 'bash scripts/publish-images.sh' } } }
-  stage('Deploy main') { when { branch 'main' } steps { sh '''
+  stage('Publish to ECR and Nexus') { when { branch 'main' }
+   steps { withCredentials([usernamePassword(credentialsId:'nexus-creds',usernameVariable:'NEXUS_USER',passwordVariable:'NEXUS_PASSWORD')]) { sh 'bash scripts/publish-images.sh' } } }
+  stage('Deploy main') { when { branch 'main' }
+   steps { sh '''
    set -eu
    aws eks update-kubeconfig --name "$EKS_CLUSTER" --region "$AWS_REGION"
    kubectl set image deployment/backend backend="$ECR_REGISTRY/blogapp-backend:$IMAGE_TAG" -n blogapp
