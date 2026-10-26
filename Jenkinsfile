@@ -21,7 +21,7 @@ pipeline {
   stage('Checkout') { steps { checkout scm; script { env.IMAGE_TAG = sh(script: 'git rev-parse --short=12 HEAD', returnStdout:true).trim() + '-' + env.BUILD_NUMBER } } }
   stage('Build and test') { steps { sh 'mkdir -p reports; cd backend && npm ci && npm test'; sh 'cd frontend && npm ci && npm test && npm run build' } }
   stage('SonarQube') { steps { script { def scanner = tool 'SonarScanner'; withSonarQubeEnv('sonarqube-server') { sh "${scanner}/bin/sonar-scanner" } } } }
-  stage('Quality gate') { steps { timeout(time:10,unit:'MINUTES') { waitForQualityGate abortPipeline:true } } }
+  stage('Quality gate') { steps { timeout(time:10,unit:'MINUTES') { withSonarQubeEnv('sonarqube-server') { sh 'python3 scripts/quality-gate.py' } } } }
   stage('Build images') { steps { sh '''
    docker build -t "$ECR_REGISTRY/blogapp-backend:$IMAGE_TAG" backend
    docker build -t "$ECR_REGISTRY/blogapp-frontend:$IMAGE_TAG" frontend

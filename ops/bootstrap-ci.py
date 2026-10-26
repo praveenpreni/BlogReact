@@ -102,7 +102,6 @@ if not values.get('sonarToken'):
  values['sonarToken']=request('http://127.0.0.1:9000','admin',values['sonarAdminPassword'],'/api/user_tokens/generate',params={'name':'blogapp-jenkins'})['token'];persist()
  # Initial project creation and authenticated webhook back to Jenkins over the private Docker network.
  request('http://127.0.0.1:9000','admin',values['sonarAdminPassword'],'/api/projects/create',params={'name':'Blog Application','project':'blogapp'})
- request('http://127.0.0.1:9000','admin',values['sonarAdminPassword'],'/api/webhooks/create',params={'name':'Jenkins','url':'http://jenkins:8080/sonarqube-webhook/','secret':values['sonarWebhookSecret']})
 print('Nexus and SonarQube configured. Credentials remain in protected host storage.',flush=True)
 # Build a dedicated Jenkins image using official tool distributions.
 trivy=release('aquasecurity/trivy');version=trivy['tag_name'].lstrip('v');asset=next(a for a in trivy['assets'] if a['name'].lower()=='trivy_'+version+'_linux-64bit.tar.gz');download(asset['browser_download_url'],ROOT/'trivy.tgz')
