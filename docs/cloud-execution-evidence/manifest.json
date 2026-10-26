@@ -1,6 +1,7 @@
 {
   "acceptanceSource": "00bfc302acd73933912fd12579b72885081d22cb",
   "acceptanceBuild": 14,
+  "supplementalDate": "2026-10-27 Asia/Kolkata",
   "files": [
     {
       "path": "E01-github-release-source.png",
@@ -353,9 +354,129 @@
       "sha256": "086e3bec525fb1db64b1e767ecd9aad9f96510ef443453c9532c84add4edc6fe"
     },
     {
+      "path": "raw/S-config-live-console.txt",
+      "bytes": 922,
+      "sha256": "a767e7fb04bfff8e1c7544f14add9fadbb87f82c19db8c0a52b4b8ffdf492249"
+    },
+    {
+      "path": "raw/S-images-live-console.txt",
+      "bytes": 2180,
+      "sha256": "09489406fd0d9b80c0d35afde774c9219cd56dd823438c0ee524bb30ebd667c9"
+    },
+    {
+      "path": "raw/S-ingress-live-console.txt",
+      "bytes": 952,
+      "sha256": "a627202b35668b08de35b3c26d343df55c37963703b69c732e9c8a291131fa02"
+    },
+    {
+      "path": "raw/S-logs-live-console.txt",
+      "bytes": 1614,
+      "sha256": "6a6286ea3b7976394f87a636164be551267f482d91e3b15ee3b11bff4cf52534"
+    },
+    {
+      "path": "raw/S-network-live-console.txt",
+      "bytes": 1727,
+      "sha256": "8478d42c8895a6950a3c92efa0b64fa3653501cced96e0aa27eaa7aaa8454f3c"
+    },
+    {
+      "path": "raw/S-persistence-live-console.txt",
+      "bytes": 2322,
+      "sha256": "3204b6d540f2a40a7fb23c9b3e1d179ac56c1340058eec214dcbad83685476a0"
+    },
+    {
+      "path": "raw/S-persistence-repeat.json",
+      "bytes": 864,
+      "sha256": "cfd070680c970e4059b4f88c8657224b4f0483c99a466931578fe082c9056fef"
+    },
+    {
+      "path": "raw/S-production-live-console.txt",
+      "bytes": 2206,
+      "sha256": "1ce78f6073ea6c5313e26a76b189fda29fd38eb0879b73154293eef984a27055"
+    },
+    {
+      "path": "raw/S-rollout-live-console.txt",
+      "bytes": 2070,
+      "sha256": "0fb58da287cb9482c4bf437d6af6ecac7025f8ab6d7ec9f342195e4ecbf7efc3"
+    },
+    {
+      "path": "raw/S-rollout-traffic.json",
+      "bytes": 220,
+      "sha256": "1dad0960244af88ebb7980d85c80beb426a7882927c96d5517bb5190b4470727"
+    },
+    {
       "path": "README.md",
-      "bytes": 1426,
-      "sha256": "bd420235767644080fb0c1a467a5e5b02cb250c78a8cb2faaad9dc92cb12d288"
+      "bytes": 2597,
+      "sha256": "6afd53fd01650dca440e947b084d2e50826009876c96a56935d937a2bc4f2ac5"
+    },
+    {
+      "path": "S06-build14-real-image-scans-pass.png",
+      "bytes": 121999,
+      "sha256": "675a71e482b1740088f807532a6100cb8138984bea4060070e314fe7c457532a"
+    },
+    {
+      "path": "S07-aws-api-gateway-vpc-integration.png",
+      "bytes": 91507,
+      "sha256": "384e8c839ecf824d6cec13c4657fce1edf9f76591666bc709034a90ecee7d90e"
+    },
+    {
+      "path": "S07-aws-internal-alb.png",
+      "bytes": 111458,
+      "sha256": "5feb50489e4c8fd5114bb28be03e13e4c9453751a195e28a40bfd227e76ff754"
+    },
+    {
+      "path": "S07-aws-vpc-link-available.png",
+      "bytes": 82621,
+      "sha256": "75a1f6ada07f489900fe95a9cb78469830ebd09a151536404edefaf2eab57238"
+    },
+    {
+      "path": "S07-live-backend-describe-production.png",
+      "bytes": 127346,
+      "sha256": "7b94a83c9f70efd7ef76894fa06c22abf9ec19809819bf3ceb027312a14d170e"
+    },
+    {
+      "path": "S07-live-backend-describe-readable.png",
+      "bytes": 82099,
+      "sha256": "2bafcc73ac60dce2f4b67edebbe85521261ec0b072b7adf1d80d0d74741a84b8"
+    },
+    {
+      "path": "S07-live-deployed-image-tags.png",
+      "bytes": 133738,
+      "sha256": "8a1c0b4b1ec3f0f35b7a9ac22c0f4b6f4f3ea564f0b4d923d98babeaf70562f8"
+    },
+    {
+      "path": "S07-live-services-ingress.png",
+      "bytes": 66004,
+      "sha256": "90d1bcccab4fa5e681b47b5c39b35f0712c49ee058b1e533c9f7d013825084d0"
+    },
+    {
+      "path": "S09-live-mysql-before-after.png",
+      "bytes": 116293,
+      "sha256": "745d8f24d94fe74c55d611dcacd5295ec07fa8e96b7de7f2d49f3a7aad01668b"
+    },
+    {
+      "path": "S10-live-rollout-completed.png",
+      "bytes": 130580,
+      "sha256": "c533523b04ef8dce49d42505fdce22ba44244d56d5bd0201148868afb4896faa"
+    },
+    {
+      "path": "S10-live-rollout-in-progress.png",
+      "bytes": 56480,
+      "sha256": "c1546402fbf2a7a8db00e603acea11a8468c44a4c87d109a05ca9f4e1f689eb5"
+    },
+    {
+      "path": "S11-live-config-secret-pvc-statefulset.png",
+      "bytes": 62422,
+      "sha256": "3b1bfac480f72d9c5a240ae7b2ece3d14693ef75489ec2b3ebae0ac617030e9b"
+    },
+    {
+      "path": "S12-live-network-policy-tests.png",
+      "bytes": 121840,
+      "sha256": "406cc48d5c4b13e6c00f0e4ed3a2cf5bf3013753197c51a8476dd9f127c76a72"
+    },
+    {
+      "path": "S14-live-kubectl-logs.png",
+      "bytes": 116456,
+      "sha256": "ddb0bfe3df8f445beee82f92180f2a14a5afd067623cd050002e4a804c9bf556"
     }
   ]
 }

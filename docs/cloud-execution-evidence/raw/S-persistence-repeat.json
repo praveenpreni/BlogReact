@@ -1,0 +1,10 @@
+{
+  "capturedAt": "2026-10-26T19:52:49.170226+00:00",
+  "beforeIdentity": "KIND                    NAME           UID                                    PHASE     VOLUME\nPod                     mysql-0        1fc06f12-c7d4-4693-86e5-1e2b4e647764   Running   <none>\nPersistentVolumeClaim   data-mysql-0   f58922e6-d455-4c9d-8306-33fa70441279   Bound     pvc-f58922e6-d455-4c9d-8306-33fa70441279\n",
+  "afterIdentity": "KIND                    NAME           UID                                    PHASE     VOLUME\nPod                     mysql-0        51b1ae9f-57c8-41f8-ab87-bcce8999c33c   Running   <none>\nPersistentVolumeClaim   data-mysql-0   f58922e6-d455-4c9d-8306-33fa70441279   Bound     pvc-f58922e6-d455-4c9d-8306-33fa70441279\n",
+  "postId": 3,
+  "commentsRetained": 1,
+  "samePostBody": true,
+  "recoverySeconds": 18.52,
+  "passed": true
+}

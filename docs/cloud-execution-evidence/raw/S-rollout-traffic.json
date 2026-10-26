@@ -1,0 +1,9 @@
+{
+  "capturedAt": "2026-10-26T19:49:52.366999+00:00",
+  "purpose": "Supplemental redeployment of accepted immutable build 14 images",
+  "requests": 96,
+  "httpStatusCounts": {
+    "200": 96
+  },
+  "failures": 0
+}

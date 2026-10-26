@@ -1,0 +1,35 @@
+Executed: 2026-10-26T19:48:55.118533+00:00
+Context: personal AWS account / ap-south-1 / blogapp-eks / namespace blogapp
+
+$ kubectl set image deployment/frontend frontend=782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14 -n blogapp
+deployment.apps/frontend image updated
+[exit 0]
+
+$ kubectl set image deployment/backend backend=782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14 -n blogapp
+deployment.apps/backend image updated
+[exit 0]
+
+$ kubectl rollout status deployment/frontend -n blogapp --timeout=240s
+Waiting for deployment "frontend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "frontend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "frontend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "frontend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "frontend" rollout to finish: 1 old replicas are pending termination...
+deployment "frontend" successfully rolled out
+[exit 0]
+
+$ kubectl rollout status deployment/backend -n blogapp --timeout=240s
+deployment "backend" successfully rolled out
+[exit 0]
+
+$ kubectl get deploy -n blogapp -o wide
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                                                           SELECTOR
+backend    2/2     2            2           79m   backend      782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14    app=backend
+frontend   2/2     2            2           79m   frontend     782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14   app=frontend
+[exit 0]
+
+Supplemental public traffic: {"capturedAt": "2026-10-26T19:49:52.366999+00:00", "purpose": "Supplemental redeployment of accepted immutable build 14 images", "requests": 96, "httpStatusCounts": {"200": 96}, "failures": 0}
+
+All checks in this live execution completed.
+
+Process exit code: 0

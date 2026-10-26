@@ -1,0 +1,18 @@
+Executed: 2026-10-26T19:52:01.165593+00:00
+Context: personal AWS account / ap-south-1 / blogapp-eks / namespace blogapp
+
+$ kubectl get svc,ingress -n blogapp
+NAME                       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/backend-service    ClusterIP   10.100.68.178    <none>        5000/TCP   81m
+service/frontend-service   ClusterIP   10.100.128.18    <none>        8080/TCP   155m
+service/mysql-headless     ClusterIP   None             <none>        3306/TCP   150m
+service/mysql-service      ClusterIP   10.100.255.127   <none>        3306/TCP   150m
+
+NAME                                CLASS   HOSTS   ADDRESS                                                               PORTS   AGE
+ingress.networking.k8s.io/blogapp   alb     *       internal-blogapp-private-alb-956050535.ap-south-1.elb.amazonaws.com   80      155m
+[exit 0]
+
+
+All checks in this live execution completed.
+
+Process exit code: 0

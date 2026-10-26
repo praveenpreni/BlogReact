@@ -1,0 +1,24 @@
+Executed: 2026-10-26T19:58:40.714342+00:00
+Context: personal AWS account / ap-south-1 / blogapp-eks / namespace blogapp
+
+$ kubectl logs deployment/frontend -n blogapp --tail=2 --timestamps=true
+2026-10-26T19:49:52.045597892Z 192.168.85.174 - - [26/Oct/2026:19:49:52 +0000] "GET /api/posts HTTP/1.1" 200 2702 "-" "Python-urllib/3.12" "192.168.108.199"
+2026-10-26T19:52:26.008670380Z 192.168.85.174 - - [26/Oct/2026:19:52:26 +0000] "GET /api/posts/persistent-mysql-storage-on-encrypted-ebs-mvplgzmu HTTP/1.1" 200 1055 "-" "Python-urllib/3.12" "192.168.108.199"
+Found 2 pods, using pod/frontend-7b4d85dd65-btn57
+[exit 0]
+
+$ kubectl logs deployment/backend -n blogapp --tail=2 --timestamps=true
+2026-10-26T19:58:48.537431538Z ::ffff:192.168.91.188 - - [26/Oct/2026:19:58:48 +0000] "GET /readyz HTTP/1.1" 200 18 "-" "kube-probe/1.35"
+2026-10-26T19:58:49.189161713Z ::ffff:192.168.115.177 - - [26/Oct/2026:19:58:49 +0000] "GET /metrics HTTP/1.1" 200 - "-" "Prometheus/3.15.1"
+Found 2 pods, using pod/backend-dd66ff949-lqdmx
+[exit 0]
+
+$ kubectl logs mysql-0 -n blogapp --tail=2 --timestamps=true
+2026-10-26T19:52:40.953369748Z 2026-10-26T19:52:40.953197Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /var/run/mysqld/mysqlx.sock
+2026-10-26T19:52:40.953628036Z 2026-10-26T19:52:40.953542Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.4.13'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL.
+[exit 0]
+
+
+All checks in this live execution completed.
+
+Process exit code: 0

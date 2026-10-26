@@ -1,0 +1,52 @@
+Executed: 2026-10-26T19:51:36.538040+00:00
+Context: personal AWS account / ap-south-1 / blogapp-eks / namespace blogapp
+
+$ kubectl describe deployment backend -n blogapp  [first 42 lines]
+Name:                   backend
+Namespace:              blogapp
+CreationTimestamp:      Tue, 27 Oct 2026 00:00:23 +0530
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 9
+Selector:               app=backend
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  0 max unavailable, 1 max surge
+Pod Template:
+  Labels:  app=backend
+  Containers:
+   backend:
+    Image:           782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14
+    Port:            5000/TCP (http)
+    Host Port:       0/TCP (http)
+    SeccompProfile:  RuntimeDefault
+    Limits:
+      cpu:     500m
+      memory:  256Mi
+    Requests:
+      cpu:      100m
+      memory:   128Mi
+    Liveness:   http-get http://:5000/healthz delay=0s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:5000/readyz delay=0s timeout=1s period=5s #success=1 #failure=3
+    Startup:    http-get http://:5000/healthz delay=0s timeout=1s period=5s #success=1 #failure=30
+    Environment Variables from:
+      backend-config  ConfigMap  Optional: false
+    Environment:
+      DB_PASSWORD:              <set to the key 'DB_PASSWORD' in secret 'blog-secrets'>  Optional: false
+      JWT_SECRET:               <set to the key 'JWT_SECRET' in secret 'blog-secrets'>   Optional: false
+    Mounts:                     <none>
+  Volumes:                      <none>
+  Topology Spread Constraints:  kubernetes.io/hostname:ScheduleAnyway when max skew 1 is exceeded for selector app=backend
+  Node-Selectors:               <none>
+  Tolerations:                  <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+[exit 0]
+
+
+All checks in this live execution completed.
+
+Process exit code: 0

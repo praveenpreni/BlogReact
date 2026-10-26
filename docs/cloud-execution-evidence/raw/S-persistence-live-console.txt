@@ -1,0 +1,30 @@
+Executed: 2026-10-26T19:52:26.055362+00:00
+Context: personal AWS account / ap-south-1 / blogapp-eks / namespace blogapp
+
+BEFORE recreation:
+$ kubectl get pod/mysql-0 pvc/data-mysql-0 -n blogapp -o custom-columns=KIND:.kind,NAME:.metadata.name,UID:.metadata.uid,PHASE:.status.phase,VOLUME:.spec.volumeName
+KIND                    NAME           UID                                    PHASE     VOLUME
+Pod                     mysql-0        1fc06f12-c7d4-4693-86e5-1e2b4e647764   Running   <none>
+PersistentVolumeClaim   data-mysql-0   f58922e6-d455-4c9d-8306-33fa70441279   Bound     pvc-f58922e6-d455-4c9d-8306-33fa70441279
+[exit 0]
+
+$ kubectl delete pod/mysql-0 -n blogapp --wait=true
+pod "mysql-0" deleted from blogapp namespace
+[exit 0]
+
+$ kubectl wait --for=condition=Ready pod/mysql-0 -n blogapp --timeout=180s
+pod/mysql-0 condition met
+[exit 0]
+
+AFTER recreation:
+$ kubectl get pod/mysql-0 pvc/data-mysql-0 -n blogapp -o custom-columns=KIND:.kind,NAME:.metadata.name,UID:.metadata.uid,PHASE:.status.phase,VOLUME:.spec.volumeName
+KIND                    NAME           UID                                    PHASE     VOLUME
+Pod                     mysql-0        51b1ae9f-57c8-41f8-ab87-bcce8999c33c   Running   <none>
+PersistentVolumeClaim   data-mysql-0   f58922e6-d455-4c9d-8306-33fa70441279   Bound     pvc-f58922e6-d455-4c9d-8306-33fa70441279
+[exit 0]
+
+Public API read-back: {"capturedAt": "2026-10-26T19:52:49.170226+00:00", "beforeIdentity": "KIND                    NAME           UID                                    PHASE     VOLUME\nPod                     mysql-0        1fc06f12-c7d4-4693-86e5-1e2b4e647764   Running   <none>\nPersistentVolumeClaim   data-mysql-0   f58922e6-d455-4c9d-8306-33fa70441279   Bound     pvc-f58922e6-d455-4c9d-8306-33fa70441279\n", "afterIdentity": "KIND                    NAME           UID                                    PHASE     VOLUME\nPod                     mysql-0        51b1ae9f-57c8-41f8-ab87-bcce8999c33c   Running   <none>\nPersistentVolumeClaim   data-mysql-0   f58922e6-d455-4c9d-8306-33fa70441279   Bound     pvc-f58922e6-d455-4c9d-8306-33fa70441279\n", "postId": 3, "commentsRetained": 1, "samePostBody": true, "recoverySeconds": 18.52, "passed": true}
+
+All checks in this live execution completed.
+
+Process exit code: 0

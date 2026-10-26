@@ -1,0 +1,23 @@
+Executed: 2026-10-26T19:50:48.763072+00:00
+Context: personal AWS account / ap-south-1 / blogapp-eks / namespace blogapp
+
+$ kubectl get configmap,secret,pvc,statefulset -n blogapp
+NAME                         DATA   AGE
+configmap/backend-config     6      80m
+configmap/kube-root-ca.crt   1      158m
+configmap/mysql-init         1      149m
+
+NAME                  TYPE     DATA   AGE
+secret/blog-secrets   Opaque   3      149m
+
+NAME                                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/data-mysql-0   Bound    pvc-f58922e6-d455-4c9d-8306-33fa70441279   20Gi       RWO            blog-gp3       <unset>                 148m
+
+NAME                     READY   AGE
+statefulset.apps/mysql   1/1     148m
+[exit 0]
+
+
+All checks in this live execution completed.
+
+Process exit code: 0

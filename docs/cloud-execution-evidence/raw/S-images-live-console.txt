@@ -1,0 +1,22 @@
+Executed: 2026-10-26T19:53:35.477284+00:00
+Context: personal AWS account / ap-south-1 / blogapp-eks / namespace blogapp
+
+$ kubectl get deploy -n blogapp -o wide
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                                                           SELECTOR
+backend    2/2     2            2           83m   backend      782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14    app=backend
+frontend   2/2     2            2           83m   frontend     782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14   app=frontend
+[exit 0]
+
+$ kubectl get pods -n blogapp -o custom-columns=NAME:.metadata.name,IMAGE:.spec.containers[*].image,IMAGE_ID:.status.containerStatuses[*].imageID
+NAME                        IMAGE                                                                            IMAGE_ID
+backend-dd66ff949-2sh2t     782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14    782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend@sha256:d78406694582cdd99a5fa0d8c5d8479e1bc5ed73275da143e8189af9fcfa7464
+backend-dd66ff949-lqdmx     782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14    782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend@sha256:d78406694582cdd99a5fa0d8c5d8479e1bc5ed73275da143e8189af9fcfa7464
+frontend-7b4d85dd65-btn57   782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14   782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend@sha256:432355d5014fcb212b9cc0910bdd9e9b2fb71ab38ceab694776e38447b8ddc16
+frontend-7b4d85dd65-wrgq6   782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14   782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend@sha256:432355d5014fcb212b9cc0910bdd9e9b2fb71ab38ceab694776e38447b8ddc16
+mysql-0                     mysql:8.4                                                                        docker.io/library/mysql@sha256:76f0358884cb92d9a086d24e5671c38048d3fef40f2588703d73eb55392d6b69
+[exit 0]
+
+
+All checks in this live execution completed.
+
+Process exit code: 0

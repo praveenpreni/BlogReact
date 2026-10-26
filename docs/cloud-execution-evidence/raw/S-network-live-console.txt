@@ -1,0 +1,43 @@
+Executed: 2026-10-26T19:51:17.205209+00:00
+Context: personal AWS account / ap-south-1 / blogapp-eks / namespace blogapp
+
+$ kubectl get networkpolicy -n blogapp
+NAME              POD-SELECTOR   AGE
+backend-ingress   app=backend    81m
+mysql-ingress     app=mysql      149m
+[exit 0]
+
+$ kubectl apply -f C:\Users\pravn\Documents\Codex\2026-10-21\it\work\live-paid\network-proof-pod.json
+pod/blog-network-denied-proof created
+[exit 0]
+
+$ kubectl wait --for=condition=Ready pod/blog-network-denied-proof -n blogapp --timeout=120s
+pod/blog-network-denied-proof condition met
+[exit 0]
+
+$ kubectl exec -n blogapp blog-network-denied-proof -- nc -z -w 3 mysql-service 3306
+command terminated with exit code 1
+[exit 1]
+
+$ kubectl exec -n blogapp blog-network-denied-proof -- wget -q -T 3 -O - http://backend-service:5000/readyz
+wget: download timed out
+command terminated with exit code 1
+[exit 1]
+
+$ kubectl exec -n blogapp deployment/frontend -- wget -q -T 5 -O - http://backend-service:5000/readyz
+{"status":"ready"}
+[exit 0]
+
+$ kubectl exec -n blogapp deployment/backend -- node -e const net=require('net');const s=net.createConnection({host:'mysql-service',port:3306});s.setTimeout(3000);s.on('connect',()=>{console.log('MySQL TCP connection allowed from backend');s.destroy();});s.on('error',()=>process.exit(1));s.on('timeout',()=>process.exit(1));
+MySQL TCP connection allowed from backend
+[exit 0]
+
+$ kubectl delete pod/blog-network-denied-proof -n blogapp --wait=false
+pod "blog-network-denied-proof" deleted from blogapp namespace
+[exit 0]
+
+PASS: unrelated client denied; intended frontend/backend traffic allowed.
+
+All checks in this live execution completed.
+
+Process exit code: 0
