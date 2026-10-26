@@ -59,11 +59,18 @@ http {
  }
 }
 ''')
+secretfile=ROOT/'secrets.json'
+if secretfile.exists():values=json.loads(secretfile.read_text())
+else:
+ values={k:secrets.token_urlsafe(30) for k in ['nexusAdminPassword','nexusDeployPassword','sonarAdminPassword','jenkinsAdminPassword','sonarWebhookSecret','postgresPassword']};secretfile.write_text(json.dumps(values));secretfile.chmod(0o600)
+def persist():secretfile.write_text(json.dumps(values));secretfile.chmod(0o600)
+
 services={'name':'blog-ci','services':{
- 'sonarqube':{'image':'sonarqube:lts-community','ports':['127.0.0.1:9000:9000'],'volumes':['sonar-data:/opt/sonarqube/data','sonar-extensions:/opt/sonarqube/extensions','sonar-logs:/opt/sonarqube/logs'],'ulimits':{'nofile':{'soft':131072,'hard':131072},'nproc':8192}},
+ 'postgres':{'image':'postgres:17-alpine','environment':{'POSTGRES_DB':'sonar','POSTGRES_USER':'sonar','POSTGRES_PASSWORD':values['postgresPassword']},'volumes':['postgres-data:/var/lib/postgresql/data'],'healthcheck':{'test':['CMD-SHELL','pg_isready -U sonar -d sonar'],'interval':'5s','timeout':'3s','retries':30}},
+ 'sonarqube':{'image':'sonarqube:lts-community','environment':{'SONAR_JDBC_URL':'jdbc:postgresql://postgres:5432/sonar','SONAR_JDBC_USERNAME':'sonar','SONAR_JDBC_PASSWORD':values['postgresPassword']},'depends_on':{'postgres':{'condition':'service_healthy'}},'ports':['127.0.0.1:9000:9000'],'volumes':['sonar-data:/opt/sonarqube/data','sonar-extensions:/opt/sonarqube/extensions','sonar-logs:/opt/sonarqube/logs'],'ulimits':{'nofile':{'soft':131072,'hard':131072},'nproc':8192}},
  'nexus':{'image':'sonatype/nexus3:latest','ports':['127.0.0.1:8081:8081'],'volumes':['nexus-data:/nexus-data'],'environment':{'INSTALL4J_ADD_VM_PARAMS':'-Xms1200m -Xmx1200m -XX:MaxDirectMemorySize=1200m'}},
  'registry':{'image':'nginx:stable-alpine','ports':['127.0.0.1:5000:5000','127.0.0.1:8443:8443'],'volumes':['./nginx.conf:/etc/nginx/nginx.conf:ro','./tls:/tls:ro'],'depends_on':['nexus'],'networks':{'default':{'aliases':['nexus.registry.internal']}}}
-},'volumes':{k:{} for k in ['sonar-data','sonar-extensions','sonar-logs','nexus-data','jenkins-data']}}
+},'volumes':{k:{} for k in ['sonar-data','sonar-extensions','sonar-logs','nexus-data','jenkins-data','postgres-data']}}
 (ROOT/'compose.json').write_text(json.dumps(services,indent=2))
 cmd(['docker','compose','-f','compose.json','up','-d'])
 wait('http://127.0.0.1:8081/service/rest/v1/status');wait('http://127.0.0.1:9000/api/system/status')
@@ -73,11 +80,6 @@ for _ in range(120):
  except Exception:pass
  time.sleep(5)
 else:raise RuntimeError('SonarQube did not finish starting')
-secretfile=ROOT/'secrets.json'
-if secretfile.exists():values=json.loads(secretfile.read_text())
-else:
- values={k:secrets.token_urlsafe(30) for k in ['nexusAdminPassword','nexusDeployPassword','sonarAdminPassword','jenkinsAdminPassword','sonarWebhookSecret']};secretfile.write_text(json.dumps(values));secretfile.chmod(0o600)
-def persist():secretfile.write_text(json.dumps(values));secretfile.chmod(0o600)
 if not values.get('nexusConfigured'):
  if not values.get('nexusPasswordChanged'):
   old=cmd(['docker','compose','-f','compose.json','exec','-T','nexus','cat','/nexus-data/admin.password']).strip()
@@ -102,7 +104,7 @@ if not values.get('sonarToken'):
  request('http://127.0.0.1:9000','admin',values['sonarAdminPassword'],'/api/webhooks/create',params={'name':'Jenkins','url':'http://jenkins:8080/sonarqube-webhook/','secret':values['sonarWebhookSecret']})
 print('Nexus and SonarQube configured. Credentials remain in protected host storage.',flush=True)
 # Build a dedicated Jenkins image using official tool distributions.
-trivy=release('aquasecurity/trivy');version=trivy['tag_name'].lstrip('v');asset=next(a for a in trivy['assets'] if a['name']=='trivy_'+version+'_Linux-64bit.tar.gz');download(asset['browser_download_url'],ROOT/'trivy.tgz')
+trivy=release('aquasecurity/trivy');version=trivy['tag_name'].lstrip('v');asset=next(a for a in trivy['assets'] if a['name'].lower()=='trivy_'+version+'_linux-64bit.tar.gz');download(asset['browser_download_url'],ROOT/'trivy.tgz')
 checks=next(a for a in trivy['assets'] if a['name'].endswith('_checksums.txt'));s=urllib.request.urlopen(checks['browser_download_url']).read().decode();expected=next(line.split()[0] for line in s.splitlines() if line.endswith(asset['name']));assert hashlib.sha256((ROOT/'trivy.tgz').read_bytes()).hexdigest()==expected
 with tarfile.open(ROOT/'trivy.tgz') as archive:
  member=archive.getmember('trivy');(ROOT/'trivy').write_bytes(archive.extractfile(member).read())
@@ -132,10 +134,11 @@ account=json.loads(cmd(['aws','sts','get-caller-identity','--output','json']))['
 config={'jenkins':{'systemMessage':'BlogApp dedicated project CI','numExecutors':1,'labelString':'blog-ci','securityRealm':{'local':{'allowsSignup':False,'users':[{'id':'admin','password':values['jenkinsAdminPassword']}]}},'authorizationStrategy':{'loggedInUsersCanDoAnything':{'allowAnonymousRead':False}},'globalNodeProperties':[{'envVars':{'env':[{'key':'BLOG_ECR_REGISTRY','value':registry},{'key':'BLOG_NEXUS_URL','value':'https://nexus.registry.internal:8443/repository/blog-releases'},{'key':'BLOG_NEXUS_DOCKER_REGISTRY','value':'nexus.registry.internal:5000'},{'key':'BLOG_APP_URL','value':'https://PENDING_APP_URL'}]}}]},'credentials':{'system':{'domainCredentials':[{'credentials':[{'usernamePassword':{'scope':'GLOBAL','id':'nexus-creds','username':'blog-deployer','password':values['nexusDeployPassword']}},{'string':{'scope':'GLOBAL','id':'sonar-token','secret':values['sonarToken']}},{'string':{'scope':'GLOBAL','id':'sonar-webhook','secret':values['sonarWebhookSecret']}}]}]}},'unclassified':{'sonarGlobalConfiguration':{'buildWrapperEnabled':True,'installations':[{'name':'sonarqube-server','serverUrl':'http://sonarqube:9000','credentialsId':'sonar-token','webhookSecretId':'sonar-webhook'}]}},'tool':{'sonarRunnerInstallation':{'installations':[{'name':'SonarScanner','home':'/opt/sonar-scanner'}]}},'jobs':[{'script':"multibranchPipelineJob('BlogApp') { branchSources { git { id('blogapp-main'); remote('https://github.com/praveenpreni/BlogReact.git'); includes('main') } }; factory { workflowBranchProjectFactory { scriptPath('Jenkinsfile') } }; triggers { periodicFolderTrigger { interval('1m') } } }"}]}
 (ROOT/'jenkins-casc.json').write_text(json.dumps(config,indent=2));(ROOT/'jenkins-casc.json').chmod(0o600)
 docker_gid=Path('/var/run/docker.sock').stat().st_gid
-services['services']['jenkins']={'image':'blogapp-jenkins:local','ports':['127.0.0.1:8080:8080'],'environment':{'JAVA_OPTS':'-Djenkins.install.runSetupWizard=false','CASC_JENKINS_CONFIG':'/var/jenkins_home/casc.json','AWS_DEFAULT_REGION':'ap-south-1'},'volumes':['jenkins-data:/var/jenkins_home','/var/run/docker.sock:/var/run/docker.sock','./jenkins-casc.json:/var/jenkins_home/casc.json:ro'],'group_add':[str(docker_gid)]}
+services['services']['jenkins']={'image':'blogapp-jenkins:local','ports':['127.0.0.1:8080:8080'],'environment':{'JAVA_OPTS':'-Xms256m -Xmx1536m -Djenkins.install.runSetupWizard=false','CASC_JENKINS_CONFIG':'/var/jenkins_home/casc.json','AWS_DEFAULT_REGION':'ap-south-1'},'volumes':['jenkins-data:/var/jenkins_home','/var/run/docker.sock:/var/run/docker.sock','./jenkins-casc.json:/var/jenkins_home/casc.json:ro'],'group_add':[str(docker_gid)]}
 # JCasC is readable only by the container user and host administrators.
 cmd(['chown','1000:1000',str(ROOT/'jenkins-casc.json')])
 (ROOT/'compose.json').write_text(json.dumps(services,indent=2));cmd(['docker','compose','-f','compose.json','up','-d','jenkins'])
 wait('http://127.0.0.1:8080/login')
+(ROOT/'component-images.json').write_text(cmd(['docker','image','ls','--digests','--format','json']))
 (ROOT/'ci-ready').write_text('ready\n')
 print('Private CI services are ready. No administrative service is publicly exposed.',flush=True)
