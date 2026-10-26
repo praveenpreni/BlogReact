@@ -1,0 +1,22 @@
+KUBERNETES APPLICATION LOGGING - RECORDED EXECUTION
+Captured UTC: 2026-10-26T19:18:54.062950+00:00
+Existing project operator access; original command output follows.
+
+COMMAND: kubectl logs deployment/frontend -n blogapp --timestamps --tail=3
+2026-10-26T19:17:44.718589734Z 192.168.126.189 - - [26/Oct/2026:19:17:44 +0000] "GET /assets/index-nQt1e6Rd.js HTTP/1.1" 304 0 "https://1c3j649rgg.execute-api.ap-south-1.amazonaws.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "192.168.90.14"
+2026-10-26T19:17:44.721793816Z 192.168.85.174 - - [26/Oct/2026:19:17:44 +0000] "GET /assets/index-osMMORaN.css HTTP/1.1" 304 0 "https://1c3j649rgg.execute-api.ap-south-1.amazonaws.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "192.168.90.14"
+2026-10-26T19:17:44.847656163Z 192.168.85.174 - - [26/Oct/2026:19:17:44 +0000] "GET /favicon.ico HTTP/1.1" 304 0 "https://1c3j649rgg.execute-api.ap-south-1.amazonaws.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "192.168.108.199"
+EXIT CODE: 0
+
+COMMAND: kubectl logs deployment/backend -n blogapp --timestamps --tail=3
+2026-10-26T19:19:01.002532454Z ::ffff:192.168.127.247 - - [26/Oct/2026:19:19:01 +0000] "GET /healthz HTTP/1.1" 200 15 "-" "kube-probe/1.35"
+2026-10-26T19:19:01.019504651Z ::ffff:192.168.127.247 - - [26/Oct/2026:19:19:01 +0000] "GET /readyz HTTP/1.1" 200 18 "-" "kube-probe/1.35"
+2026-10-26T19:19:06.019273316Z ::ffff:192.168.127.247 - - [26/Oct/2026:19:19:06 +0000] "GET /readyz HTTP/1.1" 200 18 "-" "kube-probe/1.35"
+EXIT CODE: 0
+
+COMMAND: kubectl logs mysql-0 -n blogapp --timestamps --tail=3
+2026-10-26T18:43:58.371113007Z 2026-10-26T18:43:58.370743Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+2026-10-26T18:43:58.439041345Z 2026-10-26T18:43:58.438761Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /var/run/mysqld/mysqlx.sock
+2026-10-26T18:43:58.439070956Z 2026-10-26T18:43:58.438953Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.4.13'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL.
+EXIT CODE: 0
+

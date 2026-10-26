@@ -1,0 +1,6 @@
+NAME                        CPU(cores)   MEMORY(bytes)   
+backend-dd66ff949-kwgp5     6m           35Mi            
+backend-dd66ff949-ltdfk     6m           35Mi            
+frontend-7b4d85dd65-ljhk2   1m           3Mi             
+frontend-7b4d85dd65-thl65   1m           3Mi             
+mysql-0                     9m           438Mi           

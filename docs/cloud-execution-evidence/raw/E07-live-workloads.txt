@@ -1,0 +1,25 @@
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                                                           SELECTOR
+deployment.apps/backend    2/2     2            2           50m   backend      782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14    app=backend
+deployment.apps/frontend   2/2     2            2           50m   frontend     782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14   app=frontend
+
+NAME                     READY   AGE    CONTAINERS   IMAGES
+statefulset.apps/mysql   1/1     119m   mysql        mysql:8.4
+
+NAME                            READY   STATUS    RESTARTS   AGE   IP                NODE                                             NOMINATED NODE   READINESS GATES
+pod/backend-dd66ff949-kwgp5     1/1     Running   0          22m   192.168.99.149    ip-192-168-127-247.ap-south-1.compute.internal   <none>           <none>
+pod/backend-dd66ff949-ltdfk     1/1     Running   0          22m   192.168.125.237   ip-192-168-127-247.ap-south-1.compute.internal   <none>           <none>
+pod/frontend-7b4d85dd65-ljhk2   1/1     Running   0          22m   192.168.76.137    ip-192-168-91-188.ap-south-1.compute.internal    <none>           1/1
+pod/frontend-7b4d85dd65-thl65   1/1     Running   0          22m   192.168.65.212    ip-192-168-91-188.ap-south-1.compute.internal    <none>           1/1
+pod/mysql-0                     1/1     Running   0          37m   192.168.84.196    ip-192-168-91-188.ap-south-1.compute.internal    <none>           <none>
+
+NAME                       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE    SELECTOR
+service/backend-service    ClusterIP   10.100.68.178    <none>        5000/TCP   51m    app=backend
+service/frontend-service   ClusterIP   10.100.128.18    <none>        8080/TCP   124m   app=frontend
+service/mysql-headless     ClusterIP   None             <none>        3306/TCP   119m   app=mysql
+service/mysql-service      ClusterIP   10.100.255.127   <none>        3306/TCP   119m   app=mysql
+
+NAME                                CLASS   HOSTS   ADDRESS                                                               PORTS   AGE
+ingress.networking.k8s.io/blogapp   alb     *       internal-blogapp-private-alb-956050535.ap-south-1.elb.amazonaws.com   80      124m
+
+NAME                                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE    VOLUMEMODE
+persistentvolumeclaim/data-mysql-0   Bound    pvc-f58922e6-d455-4c9d-8306-33fa70441279   20Gi       RWO            blog-gp3       <unset>                 119m   Filesystem

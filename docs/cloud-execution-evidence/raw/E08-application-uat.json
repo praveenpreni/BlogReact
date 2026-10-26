@@ -1,0 +1,30 @@
+{
+  "capturedAt": "2026-10-26T18:33:02.709847+00:00",
+  "applicationUrl": "https://1c3j649rgg.execute-api.ap-south-1.amazonaws.com",
+  "register": true,
+  "login": true,
+  "createPost": true,
+  "readPost": true,
+  "createComment": true,
+  "readComment": true,
+  "posts": [
+    {
+      "id": 1,
+      "slug": "a-three-tier-blog-running-on-amazon-eks-mvplgxtr",
+      "title": "A three-tier blog running on Amazon EKS",
+      "comments": 1
+    },
+    {
+      "id": 2,
+      "slug": "how-the-vulnerability-gate-stopped-a-release-mvplgyrm",
+      "title": "How the vulnerability gate stopped a release",
+      "comments": 1
+    },
+    {
+      "id": 3,
+      "slug": "persistent-mysql-storage-on-encrypted-ebs-mvplgzmu",
+      "title": "Persistent MySQL storage on encrypted EBS",
+      "comments": 1
+    }
+  ]
+}

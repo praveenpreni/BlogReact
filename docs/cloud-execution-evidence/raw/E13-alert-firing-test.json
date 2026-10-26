@@ -1,0 +1,25 @@
+{
+  "capturedAt": "2026-10-26T18:41:32.976523+00:00",
+  "type": "controlled synthetic acceptance rule; not an application outage",
+  "firing": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "__name__": "ALERTS",
+            "alertname": "BlogEvidenceAlert",
+            "alertstate": "firing",
+            "purpose": "acceptance-test",
+            "severity": "info"
+          },
+          "value": [
+            1793040092.711,
+            "1"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "frontend": [
+    {
+      "registryId": "782610231927",
+      "repositoryName": "blogapp-frontend",
+      "imageDigest": "sha256:432355d5014fcb212b9cc0910bdd9e9b2fb71ab38ceab694776e38447b8ddc16",
+      "imageTags": [
+        "637d498b4850-12",
+        "6e6a9688ba39-10",
+        "00bfc302acd7-14",
+        "9d96c44b703b-11",
+        "00bfc302acd7-13"
+      ],
+      "imageSizeInBytes": 27523580,
+      "imagePushedAt": "2026-10-26T23:59:12.088000+05:30",
+      "imageManifestMediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "artifactMediaType": "application/vnd.docker.container.image.v1+json",
+      "lastRecordedPullTime": "2026-10-27T00:00:30.905000+05:30",
+      "imageStatus": "ACTIVE"
+    }
+  ],
+  "backend": [
+    {
+      "registryId": "782610231927",
+      "repositoryName": "blogapp-backend",
+      "imageDigest": "sha256:d78406694582cdd99a5fa0d8c5d8479e1bc5ed73275da143e8189af9fcfa7464",
+      "imageTags": [
+        "00bfc302acd7-14",
+        "9d96c44b703b-11",
+        "00bfc302acd7-13",
+        "637d498b4850-12",
+        "6e6a9688ba39-10"
+      ],
+      "imageSizeInBytes": 65175950,
+      "imagePushedAt": "2026-10-26T23:59:24.896000+05:30",
+      "imageManifestMediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "artifactMediaType": "application/vnd.docker.container.image.v1+json",
+      "lastRecordedPullTime": "2026-10-27T00:00:24.217000+05:30",
+      "imageStatus": "ACTIVE"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "capturedAt": "2026-10-26T18:44:08.940143+00:00",
+  "oldPodUid": "877364e1-3435-4244-a544-2248d9224edf",
+  "newPodUid": "1fc06f12-c7d4-4693-86e5-1e2b4e647764",
+  "persistentVolumeBefore": "pvc-f58922e6-d455-4c9d-8306-33fa70441279",
+  "persistentVolumeAfter": "pvc-f58922e6-d455-4c9d-8306-33fa70441279",
+  "postIdBefore": 3,
+  "postIdAfter": 3,
+  "commentsBefore": 1,
+  "commentsAfter": 1,
+  "recoverySeconds": 28.98,
+  "applicationPostUrl": "https://1c3j649rgg.execute-api.ap-south-1.amazonaws.com/post/persistent-mysql-storage-on-encrypted-ebs-mvplgzmu",
+  "passed": true
+}

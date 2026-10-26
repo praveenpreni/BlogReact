@@ -1,0 +1,75 @@
+{
+  "capturedAt": "2026-10-26T18:39:38.491023+00:00",
+  "panels": {
+    "CPU by pod": {
+      "query": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"blogapp\",container!=\"\"}[5m]))",
+      "status": "success",
+      "series": 12
+    },
+    "Memory by pod": {
+      "query": "sum by (pod) (container_memory_working_set_bytes{namespace=\"blogapp\",container!=\"\"})",
+      "status": "success",
+      "series": 5
+    },
+    "Pod restarts": {
+      "query": "sum by (pod) (increase(kube_pod_container_status_restarts_total{namespace=\"blogapp\"}[1h]))",
+      "status": "success",
+      "series": 20
+    },
+    "Pod readiness": {
+      "query": "kube_pod_status_ready{namespace=\"blogapp\",condition=\"true\"}",
+      "status": "success",
+      "series": 5
+    },
+    "Node readiness": {
+      "query": "kube_node_status_condition{condition=\"Ready\",status=\"true\"}",
+      "status": "success",
+      "series": 2
+    },
+    "API latency p95": {
+      "query": "histogram_quantile(0.95,sum by (le) (rate(http_request_duration_seconds_bucket[5m])))",
+      "status": "success",
+      "series": 1
+    },
+    "Backend scrape targets": {
+      "status": "success",
+      "data": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {
+              "__name__": "up",
+              "container": "backend",
+              "endpoint": "http",
+              "instance": "192.168.99.149:5000",
+              "job": "backend-service",
+              "namespace": "blogapp",
+              "pod": "backend-85f4447c56-6sw6z",
+              "service": "backend-service"
+            },
+            "value": [
+              1793039978.244,
+              "1"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "up",
+              "container": "backend",
+              "endpoint": "http",
+              "instance": "192.168.125.237:5000",
+              "job": "backend-service",
+              "namespace": "blogapp",
+              "pod": "backend-85f4447c56-577bq",
+              "service": "backend-service"
+            },
+            "value": [
+              1793039978.244,
+              "1"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

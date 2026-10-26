@@ -1,0 +1,178 @@
+Started by user admin
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/Sonar-Quality-Gate-Negative
+[Pipeline] {
+[Pipeline] timeout
+Timeout set to expire in 15 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Prepare isolated untested source)
+[Pipeline] sh
++ mkdir -p fixture
+[Pipeline] writeFile
+[Pipeline] sh
++ curl -fsSL https://raw.githubusercontent.com/praveenpreni/BlogReact/ae4c4ff7a40f45c5222e902d38b04c10f050e404/scripts/quality-gate.py -o quality-gate.py
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Analyze missing coverage fixture)
+[Pipeline] withSonarQubeEnv
+Injecting SonarQube environment variables using the configuration: sonarqube-server
+[Pipeline] {
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/Sonar-Quality-Gate-Negative/fixture
+[Pipeline] {
+[Pipeline] sh
++ SONAR_TOKEN=****** /opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=blogapp-gate-negative -Dsonar.sources=.
+17:56:14.541 INFO  Scanner configuration file: /opt/sonar-scanner/conf/sonar-scanner.properties
+17:56:14.545 INFO  Project root configuration file: NONE
+17:56:14.565 INFO  SonarScanner CLI 7.2.0.5079
+17:56:14.567 INFO  Linux 6.18.56-125.164.amzn2023.x86_64 amd64
+17:56:15.544 INFO  Communicating with SonarQube Community Build 26.10.0.133078
+17:56:15.546 INFO  JRE provisioning: os[linux], arch[x86_64]
+17:56:15.952 INFO  Starting SonarScanner Engine...
+17:56:15.953 INFO  Java 21.0.12.1 Eclipse Adoptium (64-bit)
+17:56:17.313 INFO  Load global settings
+17:56:17.472 INFO  Load global settings (done) | time=157ms
+17:56:17.481 INFO  Server id: 46AF5D23-AaF5QExpR-h14dKdLLEM
+17:56:17.494 INFO  Loading required plugins
+17:56:17.496 INFO  Load plugins index
+17:56:17.522 INFO  Load plugins index (done) | time=27ms
+17:56:17.526 INFO  Load/download plugins
+17:56:17.540 INFO  Load/download plugins (done) | time=16ms
+17:56:17.915 INFO  Load project settings for component key: 'blogapp-gate-negative'
+17:56:17.954 INFO  Load project settings for component key: 'blogapp-gate-negative' (done) | time=33ms
+17:56:17.992 INFO  Process project properties
+17:56:18.041 INFO  Process project properties (done) | time=58ms
+17:56:18.059 INFO  Project key: blogapp-gate-negative
+17:56:18.061 INFO  Base dir: /var/jenkins_home/workspace/Sonar-Quality-Gate-Negative/fixture
+17:56:18.061 INFO  Working dir: /var/jenkins_home/workspace/Sonar-Quality-Gate-Negative/fixture/.scannerwork
+17:56:18.166 INFO  Load quality profiles
+17:56:18.240 INFO  Load quality profiles (done) | time=75ms
+17:56:18.283 WARN  SCM provider autodetection failed. Please use "sonar.scm.provider" to define SCM of your project, or disable the SCM Sensor in the project settings.
+17:56:18.302 INFO  Load active rules
+17:56:18.634 INFO  Load active rules (done) | time=332ms
+17:56:18.642 INFO  Load analysis cache
+17:56:18.659 INFO  Load analysis cache (404) | time=18ms
+17:56:18.771 INFO  Preprocessing files...
+17:56:18.791 INFO  1 language detected in 1 preprocessed file (done) | time=16ms
+17:56:18.792 INFO  Loading plugins for detected languages
+17:56:18.792 INFO  Load/download plugins
+17:56:18.805 INFO  Load/download plugins (done) | time=14ms
+17:56:18.993 INFO  Load project repositories
+17:56:19.108 INFO  Load project repositories (done) | time=114ms
+17:56:19.159 INFO  Indexing files...
+17:56:19.160 INFO  Project configuration:
+17:56:19.167 INFO  1 file indexed (done) | time=16ms
+17:56:19.169 INFO  Quality profile for js: Sonar way core
+17:56:19.169 INFO  ------------- Run sensors on module blogapp-gate-negative
+17:56:19.248 INFO  Load metrics repository
+17:56:19.282 INFO  Load metrics repository (done) | time=34ms
+17:56:19.759 INFO  Reflections took 104 ms to scan 1 urls, producing 30 keys and 303 values
+17:56:19.874 INFO  Sensor IaC YAML File Type Classification Sensor [iac]
+17:56:19.876 INFO  Sensor IaC YAML File Type Classification Sensor [iac] (done) | time=4ms
+17:56:19.880 INFO  Sensor IaC hadolint report Sensor [iac]
+17:56:19.881 INFO  Sensor IaC hadolint report Sensor [iac] (done) | time=0ms
+17:56:19.881 INFO  Sensor Java Config Sensor [iac]
+17:56:19.883 INFO  There are no files to be analyzed for the Java language
+17:56:19.884 INFO  Sensor Java Config Sensor [iac] (done) | time=0ms
+17:56:19.886 INFO  Sensor IaC Docker Sensor [iac]
+17:56:19.886 INFO  There are no files to be analyzed for the Docker language
+17:56:19.887 INFO  Sensor IaC Docker Sensor [iac] (done) | time=2ms
+17:56:19.887 INFO  Sensor HTML [web]
+17:56:19.894 INFO  Sensor HTML [web] (done) | time=14ms
+17:56:19.895 INFO  Sensor TextAndSecretsSensor [text]
+17:56:19.913 INFO  Available processors: 4
+17:56:19.913 INFO  Using 4 threads for analysis.
+17:56:20.304 INFO  The property "sonar.tests" is not set. To improve the analysis accuracy, we categorize a file as a test file if any of the following is true:
+  * The filename starts with "test"
+  * The filename contains "test." or "tests."
+  * Any directory in the file path is named: "doc", "docs", "test", "tests", "mock" or "mocks"
+  * Any directory in the file path has a name ending in "test" or "tests"
+
+17:56:20.345 INFO  Start fetching files for the text and secrets analysis
+17:56:20.359 INFO  Using Git CLI to retrieve dirty files
+17:56:20.363 WARN  Retrieving only language associated files, make sure to run the analysis inside a git repository to make use of inclusions specified via "sonar.text.inclusions"
+17:56:20.364 INFO  Starting the text and secrets analysis
+17:56:20.369 INFO  1 source file to be analyzed for the text and secrets analysis
+17:56:20.403 INFO  1/1 source file has been analyzed for the text and secrets analysis
+17:56:20.409 INFO  Sensor TextAndSecretsSensor [text] (done) | time=511ms
+17:56:20.411 INFO  ------------- Run sensors on project
+17:56:20.785 INFO  Sensor JavaScript/TypeScript/CSS analysis [javascript]
+17:56:21.196 INFO  Detected os: Linux arch: amd64 alpine: false. Platform: LINUX_X64
+17:56:21.199 INFO  Deploy location /var/jenkins_home/.sonar/js/node-runtime, tagetRuntime: /var/jenkins_home/.sonar/js/node-runtime/node,  version: /var/jenkins_home/.sonar/js/node-runtime/version.txt
+17:56:21.207 INFO  Using embedded Node.js runtime.
+17:56:21.208 INFO  Using Node.js executable: '/var/jenkins_home/.sonar/js/node-runtime/node'.
+17:56:23.897 INFO  Memory configuration: OS (15787 MB), Node.js (4288 MB).
+17:56:23.909 INFO  gRPC analyze-project server listening on 127.0.0.1:37913
+17:56:24.174 INFO  Plugin version: [14.0.0.46108]
+17:56:26.756 INFO  Found 0 tsconfig.json file(s): []
+17:56:27.774 INFO  1 source file to be analyzed
+17:56:27.775 INFO  Analyzing 1 file(s) using default options [lib: lib.esnext.d.ts, lib.dom.d.ts]
+17:56:27.775 INFO  1/1 source file has been analyzed
+17:56:27.849 INFO  Hit the cache for 0 out of 1
+17:56:27.850 INFO  Miss the cache for 1 out of 1: ANALYSIS_MODE_INELIGIBLE [1/1]
+17:56:27.850 INFO  Sensor JavaScript/TypeScript/CSS analysis [javascript] (done) | time=7065ms
+17:56:27.851 INFO  Sensor IaC Project Sensor [iac]
+17:56:27.853 INFO  Sensor IaC Project Sensor [iac] (done) | time=2ms
+17:56:27.854 INFO  Sensor Zero Coverage Sensor
+17:56:27.860 INFO  Sensor Zero Coverage Sensor (done) | time=7ms
+17:56:27.861 INFO  ------------- Gather SCA dependencies on project
+17:56:27.871 INFO  Dependency analysis skipped
+17:56:27.873 INFO  SCM Publisher No SCM system was detected. You can use the 'sonar.scm.provider' property to explicitly specify it.
+17:56:27.876 INFO  CPD Executor Calculating CPD for 1 file
+17:56:27.884 INFO  CPD Executor CPD calculation finished (done) | time=7ms
+17:56:27.974 INFO  Analysis report generated in 84ms, dir size=157.1 kB
+17:56:27.989 INFO  Analysis report compressed in 15ms, zip size=20.4 kB
+17:56:28.035 INFO  Analysis report uploaded in 45ms
+17:56:28.036 INFO  ANALYSIS SUCCESSFUL, you can find the results at: http://sonarqube:9000/dashboard?id=blogapp-gate-negative
+17:56:28.037 INFO  Note that you will be able to access the updated dashboard once the server has processed the submitted analysis report
+17:56:28.037 INFO  More about the report processing at http://sonarqube:9000/api/ce/task?id=a58a0b63-8b1f-43fd-85e5-813cd9edeebe
+17:56:28.178 INFO  Analysis total time: 12.159 s
+17:56:28.222 INFO  SonarScanner Engine completed successfully
+17:56:28.255 INFO  EXECUTION SUCCESS
+17:56:28.256 INFO  Total time: 13.757s
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // withSonarQubeEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Reject quality gate)
+[Pipeline] withSonarQubeEnv
+Injecting SonarQube environment variables using the configuration: sonarqube-server
+[Pipeline] {
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/Sonar-Quality-Gate-Negative/fixture
+[Pipeline] {
+[Pipeline] sh
++ python3 ../quality-gate.py
+SonarQube analysis: ecbb824e-6f6a-4dc7-81cd-6c3f0caa097b Quality gate: ERROR
+Quality gate rejected this analysis; deployment blocked
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // withSonarQubeEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deployment must never run)
+Stage "Deployment must never run" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] archiveArtifacts
+Archiving artifacts
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE

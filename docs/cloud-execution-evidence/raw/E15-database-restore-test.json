@@ -1,0 +1,19 @@
+{
+  "capturedAt": "2026-10-26T18:44:42.118870+00:00",
+  "sourceDatabase": "blogdb",
+  "isolatedRestoreDatabase": "blogdb_restore_proof",
+  "sourceCounts": {
+    "users": 3,
+    "posts": 5,
+    "comments": 5
+  },
+  "restoredCounts": {
+    "users": 3,
+    "posts": 5,
+    "comments": 5
+  },
+  "backupBytes": 7849,
+  "backupSha256": "50b4581a775b4b6c5db6c0a2a5ed01e87c3ee23793ca33c74e45c2ce5b6ad11a",
+  "backupKeptPrivate": true,
+  "passed": true
+}

@@ -1,0 +1,23 @@
+{
+  "commit": "00bfc302acd73933912fd12579b72885081d22cb",
+  "tag": "00bfc302acd7-14",
+  "buildUrl": "http://127.0.0.1:18080/job/BlogApp/job/main/14/",
+  "images": {
+    "frontend": {
+      "ecr": "782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14",
+      "nexus": "nexus.registry.internal:5000/blogapp-frontend:00bfc302acd7-14",
+      "digests": [
+        "782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend@sha256:432355d5014fcb212b9cc0910bdd9e9b2fb71ab38ceab694776e38447b8ddc16",
+        "nexus.registry.internal:5000/blogapp-frontend@sha256:432355d5014fcb212b9cc0910bdd9e9b2fb71ab38ceab694776e38447b8ddc16"
+      ]
+    },
+    "backend": {
+      "ecr": "782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14",
+      "nexus": "nexus.registry.internal:5000/blogapp-backend:00bfc302acd7-14",
+      "digests": [
+        "782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend@sha256:d78406694582cdd99a5fa0d8c5d8479e1bc5ed73275da143e8189af9fcfa7464",
+        "nexus.registry.internal:5000/blogapp-backend@sha256:d78406694582cdd99a5fa0d8c5d8479e1bc5ed73275da143e8189af9fcfa7464"
+      ]
+    }
+  }
+}

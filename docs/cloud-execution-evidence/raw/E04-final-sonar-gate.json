@@ -1,0 +1,22 @@
+{
+  "analysisId": "1e0a4d02-47c0-4e6d-b741-87baf367dfaa",
+  "projectKey": "blogapp",
+  "qualityGate": {
+    "status": "OK",
+    "conditions": [
+      {
+        "status": "OK",
+        "metricKey": "new_violations",
+        "comparator": "GT",
+        "errorThreshold": "0",
+        "actualValue": "0"
+      }
+    ],
+    "ignoredConditions": false,
+    "period": {
+      "mode": "PREVIOUS_VERSION",
+      "date": "2026-10-26T17:46:36+0000"
+    },
+    "caycStatus": "compliant"
+  }
+}

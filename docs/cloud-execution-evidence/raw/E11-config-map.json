@@ -1,0 +1,22 @@
+{
+    "apiVersion": "v1",
+    "data": {
+        "CORS_ORIGIN": "https://1c3j649rgg.execute-api.ap-south-1.amazonaws.com",
+        "DB_HOST": "mysql-service",
+        "DB_NAME": "blogdb",
+        "DB_PORT": "3306",
+        "DB_USER": "bloguser",
+        "PORT": "5000"
+    },
+    "kind": "ConfigMap",
+    "metadata": {
+        "annotations": {
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"data\":{\"CORS_ORIGIN\":\"https://1c3j649rgg.execute-api.ap-south-1.amazonaws.com\",\"DB_HOST\":\"mysql-service\",\"DB_NAME\":\"blogdb\",\"DB_PORT\":\"3306\",\"DB_USER\":\"bloguser\",\"PORT\":\"5000\"},\"kind\":\"ConfigMap\",\"metadata\":{\"annotations\":{},\"name\":\"backend-config\",\"namespace\":\"blogapp\"}}\n"
+        },
+        "creationTimestamp": "2026-10-26T18:29:58Z",
+        "name": "backend-config",
+        "namespace": "blogapp",
+        "resourceVersion": "25173",
+        "uid": "7a4e1735-affc-440e-8153-238bee79538d"
+    }
+}

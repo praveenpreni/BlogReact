@@ -1,0 +1,679 @@
+Started by user admin
+ > git rev-parse --resolve-git-dir /var/jenkins_home/caches/git-8875a42a2220cb9350a8be56ba27ef80/.git # timeout=10
+Setting origin to https://github.com/praveenpreni/BlogReact.git
+ > git config remote.origin.url https://github.com/praveenpreni/BlogReact.git # timeout=10
+Fetching origin...
+Fetching upstream changes from origin
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git config --get remote.origin.url # timeout=10
+ > git fetch --no-tags --force --progress -- origin +refs/heads/*:refs/remotes/origin/* # timeout=10
+Seen branch in repository origin/main
+Seen 1 remote branch
+Obtained Jenkinsfile from 00bfc302acd73933912fd12579b72885081d22cb
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/BlogApp_main
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/BlogApp_main/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/praveenpreni/BlogReact.git # timeout=10
+Fetching without tags
+Fetching upstream changes from https://github.com/praveenpreni/BlogReact.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --no-tags --force --progress -- https://github.com/praveenpreni/BlogReact.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+Checking out Revision 00bfc302acd73933912fd12579b72885081d22cb (main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 00bfc302acd73933912fd12579b72885081d22cb # timeout=10
+Commit message: "Record executed cloud configuration and harden Nexus secret encryption"
+ > git rev-list --no-walk 00bfc302acd73933912fd12579b72885081d22cb # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timeout
+Timeout set to expire in 45 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/BlogApp_main/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/praveenpreni/BlogReact.git # timeout=10
+Fetching without tags
+Fetching upstream changes from https://github.com/praveenpreni/BlogReact.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --no-tags --force --progress -- https://github.com/praveenpreni/BlogReact.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+Checking out Revision 00bfc302acd73933912fd12579b72885081d22cb (main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 00bfc302acd73933912fd12579b72885081d22cb # timeout=10
+Commit message: "Record executed cloud configuration and harden Nexus secret encryption"
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ git rev-parse --short=12 HEAD
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build and test)
+[Pipeline] sh
++ mkdir -p reports
++ cd backend
++ npm ci
+npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+npm warn deprecated prom-client@15.1.3: prom-client has been replaced by @prometheus-io/client
+npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+
+added 232 packages, and audited 233 packages in 2s
+
+52 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
++ npm test
+
+> blogapp-backend@1.0.0 test
+> node scripts/test.js
+
+127.0.0.1 - - [26/Oct/2026:18:57:59 +0000] "GET /healthz HTTP/1.1" 200 15 "-" "-"
+✔ liveness is independent of database (44.988871ms)
+127.0.0.1 - - [26/Oct/2026:18:57:59 +0000] "GET /readyz HTTP/1.1" 503 53 "-" "-"
+✔ readiness rejects unavailable database without leaking details (7.13187ms)
+127.0.0.1 - - [26/Oct/2026:18:57:59 +0000] "GET /readyz HTTP/1.1" 200 18 "-" "-"
+✔ readiness succeeds with database (4.36006ms)
+127.0.0.1 - - [26/Oct/2026:18:57:59 +0000] "POST /api/posts HTTP/1.1" 401 35 "-" "-"
+✔ anonymous users cannot create posts (15.567549ms)
+127.0.0.1 - - [26/Oct/2026:18:57:59 +0000] "POST /api/auth/register HTTP/1.1" 400 300 "-" "-"
+✔ invalid registration does not query database (11.074103ms)
+127.0.0.1 - - [26/Oct/2026:18:57:59 +0000] "POST /api/auth/login HTTP/1.1" 401 31 "-" "-"
+✔ unknown account cannot log in (6.614164ms)
+127.0.0.1 - - [26/Oct/2026:18:57:59 +0000] "GET /api/posts HTTP/1.1" 200 88 "-" "-"
+✔ posts are returned from persistence layer (4.386898ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 496.146094
+ℹ start of coverage report
+ℹ ------------------------------------------------------------------------------------
+ℹ file         | line % | branch % | funcs % | uncovered lines
+ℹ ------------------------------------------------------------------------------------
+ℹ src          |        |          |         | 
+ℹ  middleware  |        |          |         | 
+ℹ   auth.js    |  45.71 |    40.00 |   50.00 | 13-19 22-33
+ℹ  routes      |        |          |         | 
+ℹ   auth.js    |  51.39 |    50.00 |  100.00 | 20-39 54-68
+ℹ   posts.js   |  45.11 |    40.00 |   25.00 | 19-21 23-25 44-46 51-70 83-110 115-130
+ℹ  server.js   |  87.80 |    75.00 |   44.44 | 63-64 68-69 75-80
+ℹ ------------------------------------------------------------------------------------
+ℹ all files    |  57.45 |    54.17 |   47.06 | 
+ℹ ------------------------------------------------------------------------------------
+ℹ end of coverage report
+[Pipeline] sh
++ cd frontend
++ npm ci
+npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+
+added 126 packages, and audited 127 packages in 2s
+
+35 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
++ npm test
+
+> blogapp-frontend@1.0.0 test
+> node --test tests/*.test.js
+
+TAP version 13
+# Subtest: post listing uses same origin API and encodes query
+ok 1 - post listing uses same origin API and encodes query
+  ---
+  duration_ms: 1.889542
+  type: 'test'
+  ...
+# Subtest: API errors reach caller
+ok 2 - API errors reach caller
+  ---
+  duration_ms: 0.702405
+  type: 'test'
+  ...
+# Subtest: authenticated creation uses bearer token
+ok 3 - authenticated creation uses bearer token
+  ---
+  duration_ms: 0.361899
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 83.810179
++ npm run build
+
+> blogapp-frontend@1.0.0 build
+> vite build
+
+[36mvite v8.3.5 [32mbuilding client environment for production...[36m[39m
+transforming...
+✓ 33 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.93 kB │ gzip:  0.48 kB
+dist/assets/index-osMMORaN.css    7.67 kB │ gzip:  2.26 kB
+dist/assets/index-nQt1e6Rd.js   190.90 kB │ gzip: 62.25 kB
+
+[32m✓ built in 173ms[39m
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (SonarQube)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] tool
+[Pipeline] withSonarQubeEnv
+Injecting SonarQube environment variables using the configuration: sonarqube-server
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ SONAR_TOKEN=****** sonar-scanner
+18:58:02.856 INFO  Scanner configuration file: /opt/sonar-scanner/conf/sonar-scanner.properties
+18:58:02.860 INFO  Project root configuration file: /var/jenkins_home/workspace/BlogApp_main/sonar-project.properties
+18:58:02.879 INFO  SonarScanner CLI 7.2.0.5079
+18:58:02.882 INFO  Linux 6.18.56-125.164.amzn2023.x86_64 amd64
+18:58:03.879 INFO  Communicating with SonarQube Community Build 26.10.0.133078
+18:58:03.881 INFO  JRE provisioning: os[linux], arch[x86_64]
+18:58:04.298 INFO  Starting SonarScanner Engine...
+18:58:04.299 INFO  Java 21.0.12.1 Eclipse Adoptium (64-bit)
+18:58:05.716 INFO  Load global settings
+18:58:05.860 INFO  Load global settings (done) | time=141ms
+18:58:05.865 INFO  Server id: 46AF5D23-AaF5QExpR-h14dKdLLEM
+18:58:05.877 INFO  Loading required plugins
+18:58:05.877 INFO  Load plugins index
+18:58:05.895 INFO  Load plugins index (done) | time=17ms
+18:58:05.896 INFO  Load/download plugins
+18:58:05.907 INFO  Load/download plugins (done) | time=12ms
+18:58:06.320 INFO  Load project settings for component key: 'blogapp'
+18:58:06.338 INFO  Load project settings for component key: 'blogapp' (done) | time=18ms
+18:58:06.355 INFO  Process project properties
+18:58:06.375 INFO  Process project properties (done) | time=19ms
+18:58:06.390 INFO  Project key: blogapp
+18:58:06.391 INFO  Base dir: /var/jenkins_home/workspace/BlogApp_main
+18:58:06.398 INFO  Working dir: /var/jenkins_home/workspace/BlogApp_main/.scannerwork
+18:58:06.503 INFO  Load quality profiles
+18:58:06.552 INFO  Load quality profiles (done) | time=49ms
+18:58:06.567 INFO  Auto-configuring with CI 'Jenkins'
+18:58:06.602 INFO  Load active rules
+18:58:06.859 INFO  Load active rules (done) | time=257ms
+18:58:06.871 INFO  Load analysis cache
+18:58:06.888 INFO  Load analysis cache | time=19ms
+18:58:06.987 INFO  Preprocessing files...
+18:58:07.085 INFO  2 languages detected in 21 preprocessed files (done) | time=95ms
+18:58:07.085 INFO  0 files ignored because of scm ignore settings
+18:58:07.086 INFO  Loading plugins for detected languages
+18:58:07.086 INFO  Load/download plugins
+18:58:07.098 INFO  Load/download plugins (done) | time=11ms
+18:58:07.270 INFO  Load project repositories
+18:58:07.406 INFO  Load project repositories (done) | time=138ms
+18:58:07.458 INFO  Indexing files...
+18:58:07.461 INFO  Project configuration:
+18:58:07.477 INFO  21 files indexed (done) | time=18ms
+18:58:07.480 INFO  Quality profile for css: Sonar way core
+18:58:07.482 INFO  Quality profile for js: Sonar way core
+18:58:07.482 INFO  ------------- Run sensors on module Blog Application
+18:58:07.530 INFO  Load metrics repository
+18:58:07.571 INFO  Load metrics repository (done) | time=38ms
+18:58:07.994 INFO  Reflections took 87 ms to scan 1 urls, producing 30 keys and 303 values
+18:58:08.118 INFO  Sensor IaC YAML File Type Classification Sensor [iac]
+18:58:08.124 INFO  Sensor IaC YAML File Type Classification Sensor [iac] (done) | time=5ms
+18:58:08.129 INFO  Sensor IaC hadolint report Sensor [iac]
+18:58:08.130 INFO  Sensor IaC hadolint report Sensor [iac] (done) | time=0ms
+18:58:08.130 INFO  Sensor Java Config Sensor [iac]
+18:58:08.130 INFO  There are no files to be analyzed for the Java language
+18:58:08.136 INFO  Sensor Java Config Sensor [iac] (done) | time=0ms
+18:58:08.137 INFO  Sensor IaC Docker Sensor [iac]
+18:58:08.137 INFO  There are no files to be analyzed for the Docker language
+18:58:08.137 INFO  Sensor IaC Docker Sensor [iac] (done) | time=4ms
+18:58:08.138 INFO  Sensor HTML [web]
+18:58:08.144 INFO  Sensor HTML [web] (done) | time=13ms
+18:58:08.145 INFO  Sensor JavaScript/TypeScript Coverage [javascript]
+18:58:08.145 INFO  Analysing [/var/jenkins_home/workspace/BlogApp_main/backend/coverage/lcov.info]
+18:58:08.191 INFO  Sensor JavaScript/TypeScript Coverage [javascript] (done) | time=45ms
+18:58:08.191 INFO  Sensor TextAndSecretsSensor [text]
+18:58:08.208 INFO  Available processors: 4
+18:58:08.212 INFO  Using 4 threads for analysis.
+18:58:08.638 INFO  Start fetching files for the text and secrets analysis
+18:58:08.648 INFO  Using Git CLI to retrieve dirty files
+18:58:08.657 INFO  Retrieving language associated files and files included via "sonar.text.inclusions" that are tracked by git
+18:58:08.658 INFO  Starting the text and secrets analysis
+18:58:08.660 INFO  21 source files to be analyzed for the text and secrets analysis
+18:58:08.758 INFO  21/21 source files have been analyzed for the text and secrets analysis
+18:58:08.762 INFO  Sensor TextAndSecretsSensor [text] (done) | time=571ms
+18:58:08.764 INFO  ------------- Run sensors on project
+18:58:09.074 INFO  Sensor JavaScript/TypeScript/CSS analysis [javascript]
+18:58:09.388 INFO  Detected os: Linux arch: amd64 alpine: false. Platform: LINUX_X64
+18:58:09.389 INFO  Deploy location /var/jenkins_home/.sonar/js/node-runtime, tagetRuntime: /var/jenkins_home/.sonar/js/node-runtime/node,  version: /var/jenkins_home/.sonar/js/node-runtime/version.txt
+18:58:09.398 INFO  Using embedded Node.js runtime.
+18:58:09.398 INFO  Using Node.js executable: '/var/jenkins_home/.sonar/js/node-runtime/node'.
+18:58:12.179 INFO  Memory configuration: OS (15787 MB), Node.js (4288 MB).
+18:58:12.190 INFO  gRPC analyze-project server listening on 127.0.0.1:41299
+18:58:12.436 INFO  Plugin version: [14.0.0.46108]
+18:58:18.255 INFO  Found 0 tsconfig.json file(s): []
+18:58:18.258 INFO  21 source files to be analyzed
+18:58:18.258 INFO  Analyzing 14 file(s) using default options [lib: lib.esnext.d.ts, lib.dom.d.ts]
+18:58:18.259 INFO  Analyzing 6 file(s) using default options [lib: lib.es2024.d.ts, lib.dom.d.ts]
+18:58:18.260 INFO  21/21 source files have been analyzed
+18:58:18.277 INFO  Hit the cache for 0 out of 20
+18:58:18.279 INFO  Miss the cache for 20 out of 20: ANALYSIS_MODE_INELIGIBLE [20/20]
+18:58:18.280 INFO  Sensor JavaScript/TypeScript/CSS analysis [javascript] (done) | time=9204ms
+18:58:18.280 INFO  Sensor IaC Project Sensor [iac]
+18:58:18.281 INFO  Sensor IaC Project Sensor [iac] (done) | time=2ms
+18:58:18.281 INFO  Sensor Zero Coverage Sensor
+18:58:18.288 INFO  Sensor Zero Coverage Sensor (done) | time=6ms
+18:58:18.288 INFO  ------------- Gather SCA dependencies on project
+18:58:18.300 INFO  Dependency analysis skipped
+18:58:18.313 INFO  CPD Executor 2 files had no CPD blocks
+18:58:18.314 INFO  CPD Executor Calculating CPD for 17 files
+18:58:18.335 INFO  CPD Executor CPD calculation finished (done) | time=20ms
+18:58:18.339 INFO  SCM revision ID '00bfc302acd73933912fd12579b72885081d22cb'
+18:58:18.419 INFO  Analysis report generated in 78ms, dir size=272.7 kB
+18:58:18.461 INFO  Analysis report compressed in 40ms, zip size=108.4 kB
+18:58:18.502 INFO  Analysis report uploaded in 41ms
+18:58:18.503 INFO  ANALYSIS SUCCESSFUL, you can find the results at: http://sonarqube:9000/dashboard?id=blogapp
+18:58:18.504 INFO  Note that you will be able to access the updated dashboard once the server has processed the submitted analysis report
+18:58:18.504 INFO  More about the report processing at http://sonarqube:9000/api/ce/task?id=9b8267c5-d345-4749-9e6f-462d57ee8faa
+18:58:18.635 INFO  Analysis total time: 14.272 s
+18:58:18.676 INFO  SonarScanner Engine completed successfully
+18:58:18.706 INFO  EXECUTION SUCCESS
+18:58:18.707 INFO  Total time: 15.895s
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withSonarQubeEnv
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Quality gate)
+[Pipeline] timeout
+Timeout set to expire in 10 min
+[Pipeline] {
+[Pipeline] withSonarQubeEnv
+Injecting SonarQube environment variables using the configuration: sonarqube-server
+[Pipeline] {
+[Pipeline] sh
++ python3 scripts/quality-gate.py
+SonarQube analysis: 1e0a4d02-47c0-4e6d-b741-87baf367dfaa Quality gate: OK
+[Pipeline] }
+[Pipeline] // withSonarQubeEnv
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build images)
+[Pipeline] sh
++ docker build -t 782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14 backend
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 842B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:22-alpine
+#2 DONE 0.6s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 153B done
+#3 DONE 0.0s
+
+#4 [dependencies 1/4] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 1.07kB done
+#5 DONE 0.0s
+
+#6 [dependencies 3/4] COPY package*.json ./
+#6 CACHED
+
+#7 [dependencies 4/4] RUN npm ci --omit=dev && npm cache clean --force
+#7 CACHED
+
+#8 [runtime 4/6] COPY --from=dependencies --chown=node:node /app/node_modules ./node_modules
+#8 CACHED
+
+#9 [runtime 5/6] COPY --chown=node:node package.json ./
+#9 CACHED
+
+#10 [runtime 3/6] WORKDIR /app
+#10 CACHED
+
+#11 [runtime 2/6] RUN apk upgrade --no-cache && rm -rf /usr/local/lib/node_modules /opt/yarn-* && rm -f /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/yarn /usr/local/bin/yarnpkg /usr/local/bin/corepack
+#11 CACHED
+
+#12 [dependencies 2/4] WORKDIR /app
+#12 CACHED
+
+#13 [runtime 6/6] COPY --chown=node:node src ./src
+#13 CACHED
+
+#14 exporting to image
+#14 exporting layers done
+#14 writing image sha256:27e8abbe5035cefb400b1a2fa0899d3b24b86144d9887a71a845ba3b0744ff56 done
+#14 naming to 782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14 done
+#14 DONE 0.0s
++ docker build -t 782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14 frontend
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 522B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:22-alpine
+#2 DONE 0.3s
+
+#3 [internal] load metadata for docker.io/nginxinc/nginx-unprivileged:stable-alpine
+#3 DONE 0.6s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 153B done
+#4 DONE 0.0s
+
+#5 [build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#5 DONE 0.0s
+
+#6 [runtime 1/4] FROM docker.io/nginxinc/nginx-unprivileged:stable-alpine@sha256:f5116ed4606f3eb015dd4a8e28cb9b351476dc0ad4bc6e9f93b19cec130cdf03
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 2.78kB done
+#7 DONE 0.0s
+
+#8 [build 4/6] RUN npm ci
+#8 CACHED
+
+#9 [build 6/6] RUN npm run build
+#9 CACHED
+
+#10 [build 3/6] COPY package*.json ./
+#10 CACHED
+
+#11 [build 5/6] COPY . .
+#11 CACHED
+
+#12 [build 2/6] WORKDIR /app
+#12 CACHED
+
+#13 [runtime 3/4] COPY --from=build /app/dist /usr/share/nginx/html
+#13 CACHED
+
+#14 [runtime 2/4] RUN apk upgrade --no-cache
+#14 CACHED
+
+#15 [runtime 4/4] COPY nginx.conf /etc/nginx/conf.d/default.conf
+#15 CACHED
+
+#16 exporting to image
+#16 exporting layers done
+#16 writing image sha256:8da53d93bdbcb3d57a87bf6742fff8f26e0d9e974b2820413ffbfc419aa2c8bc done
+#16 naming to 782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14 done
+#16 DONE 0.0s
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Trivy gate)
+[Pipeline] sh
++ set -eu
++ scan_status=0
++ trivy image --exit-code 1 --severity HIGH,CRITICAL --format json --output reports/trivy-frontend.json 782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14
+2026-10-26T18:58:25Z	INFO	[vuln] Vulnerability scanning is enabled
+2026-10-26T18:58:25Z	INFO	[secret] Secret scanning is enabled
+2026-10-26T18:58:25Z	INFO	[secret] If your scanning is slow, please try '--scanners vuln' to disable secret scanning
+2026-10-26T18:58:25Z	INFO	[secret] Please see https://trivy.dev/docs/v0.76/guide/scanner/secret#recommendation for faster secret detection
+2026-10-26T18:58:25Z	INFO	Detected OS	family="alpine" version="3.24.2"
+2026-10-26T18:58:25Z	INFO	[alpine] Detecting vulnerabilities...	os_version="3.24" repository="3.24" pkg_num=70
+2026-10-26T18:58:25Z	INFO	Number of language-specific files	num=0
++ trivy image --exit-code 1 --severity HIGH,CRITICAL --format json --output reports/trivy-backend.json 782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14
+2026-10-26T18:58:25Z	INFO	[vuln] Vulnerability scanning is enabled
+2026-10-26T18:58:25Z	INFO	[secret] Secret scanning is enabled
+2026-10-26T18:58:25Z	INFO	[secret] If your scanning is slow, please try '--scanners vuln' to disable secret scanning
+2026-10-26T18:58:25Z	INFO	[secret] Please see https://trivy.dev/docs/v0.76/guide/scanner/secret#recommendation for faster secret detection
+2026-10-26T18:58:25Z	INFO	Detected OS	family="alpine" version="3.24.3"
+2026-10-26T18:58:25Z	INFO	[alpine] Detecting vulnerabilities...	os_version="3.24" repository="3.24" pkg_num=19
+2026-10-26T18:58:25Z	INFO	Number of language-specific files	num=1
+2026-10-26T18:58:25Z	INFO	[node-pkg] Detecting vulnerabilities...
++ exit 0
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Nexus release archive)
+[Pipeline] withCredentials
+Masking supported pattern matches of $NEXUS_PASSWORD
+[Pipeline] {
+[Pipeline] sh
++ set -eu
++ git archive --format=tar.gz --output=reports/blog-00bfc302acd7-14.tgz HEAD
++ curl --fail --silent --show-error --user blog-deployer:**** --upload-file reports/blog-00bfc302acd7-14.tgz https://nexus.registry.internal:8443/repository/blog-releases/blog-00bfc302acd7-14.tgz
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Publish to ECR and Nexus)
+[Pipeline] withCredentials
+Masking supported pattern matches of $NEXUS_PASSWORD
+[Pipeline] {
+[Pipeline] sh
++ bash scripts/publish-images.sh
+
+WARNING! Your credentials are stored unencrypted in '/var/jenkins_home/.docker/config.json'.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/go/credential-store/
+
+Login Succeeded
+
+WARNING! Your credentials are stored unencrypted in '/var/jenkins_home/.docker/config.json'.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/go/credential-store/
+
+Login Succeeded
+The push refers to repository [782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend]
+a9d51a551686: Preparing
+1cf63a79f52b: Preparing
+26407918ad61: Preparing
+901452d45798: Preparing
+00052d18c950: Preparing
+76d28e61993f: Preparing
+f3ab0add3da3: Preparing
+f3fc23f90da4: Preparing
+2905b9963ff3: Preparing
+ea99b346cd2f: Preparing
+b8edda8641ac: Preparing
+74d97c428c51: Preparing
+76d28e61993f: Waiting
+ea99b346cd2f: Waiting
+f3ab0add3da3: Waiting
+f3fc23f90da4: Waiting
+2905b9963ff3: Waiting
+b8edda8641ac: Waiting
+74d97c428c51: Waiting
+a9d51a551686: Layer already exists
+901452d45798: Layer already exists
+26407918ad61: Layer already exists
+00052d18c950: Layer already exists
+1cf63a79f52b: Layer already exists
+76d28e61993f: Layer already exists
+ea99b346cd2f: Layer already exists
+f3ab0add3da3: Layer already exists
+f3fc23f90da4: Layer already exists
+2905b9963ff3: Layer already exists
+b8edda8641ac: Layer already exists
+74d97c428c51: Layer already exists
+00bfc302acd7-14: digest: sha256:432355d5014fcb212b9cc0910bdd9e9b2fb71ab38ceab694776e38447b8ddc16 size: 2824
+The push refers to repository [nexus.registry.internal:5000/blogapp-frontend]
+a9d51a551686: Preparing
+1cf63a79f52b: Preparing
+26407918ad61: Preparing
+901452d45798: Preparing
+00052d18c950: Preparing
+76d28e61993f: Preparing
+f3ab0add3da3: Preparing
+f3fc23f90da4: Preparing
+2905b9963ff3: Preparing
+ea99b346cd2f: Preparing
+b8edda8641ac: Preparing
+74d97c428c51: Preparing
+f3fc23f90da4: Waiting
+2905b9963ff3: Waiting
+b8edda8641ac: Waiting
+74d97c428c51: Waiting
+ea99b346cd2f: Waiting
+76d28e61993f: Waiting
+f3ab0add3da3: Waiting
+a9d51a551686: Layer already exists
+26407918ad61: Layer already exists
+1cf63a79f52b: Layer already exists
+901452d45798: Layer already exists
+00052d18c950: Layer already exists
+76d28e61993f: Layer already exists
+f3fc23f90da4: Layer already exists
+f3ab0add3da3: Layer already exists
+ea99b346cd2f: Layer already exists
+b8edda8641ac: Layer already exists
+2905b9963ff3: Layer already exists
+74d97c428c51: Layer already exists
+00bfc302acd7-14: digest: sha256:432355d5014fcb212b9cc0910bdd9e9b2fb71ab38ceab694776e38447b8ddc16 size: 2824
+The push refers to repository [782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend]
+948cbd02211f: Preparing
+a1689afd6007: Preparing
+d61f03150d5d: Preparing
+5b01a4c0c4dd: Preparing
+9b0c6524574e: Preparing
+92ef3b67b69b: Preparing
+7f78e22f72fb: Preparing
+30ad2d1597a9: Preparing
+75c137aedfb2: Preparing
+92ef3b67b69b: Waiting
+7f78e22f72fb: Waiting
+30ad2d1597a9: Waiting
+75c137aedfb2: Waiting
+948cbd02211f: Layer already exists
+5b01a4c0c4dd: Layer already exists
+a1689afd6007: Layer already exists
+9b0c6524574e: Layer already exists
+d61f03150d5d: Layer already exists
+92ef3b67b69b: Layer already exists
+7f78e22f72fb: Layer already exists
+75c137aedfb2: Layer already exists
+30ad2d1597a9: Layer already exists
+00bfc302acd7-14: digest: sha256:d78406694582cdd99a5fa0d8c5d8479e1bc5ed73275da143e8189af9fcfa7464 size: 2199
+The push refers to repository [nexus.registry.internal:5000/blogapp-backend]
+948cbd02211f: Preparing
+a1689afd6007: Preparing
+d61f03150d5d: Preparing
+5b01a4c0c4dd: Preparing
+9b0c6524574e: Preparing
+92ef3b67b69b: Preparing
+7f78e22f72fb: Preparing
+30ad2d1597a9: Preparing
+75c137aedfb2: Preparing
+92ef3b67b69b: Waiting
+7f78e22f72fb: Waiting
+30ad2d1597a9: Waiting
+75c137aedfb2: Waiting
+5b01a4c0c4dd: Layer already exists
+9b0c6524574e: Layer already exists
+948cbd02211f: Layer already exists
+d61f03150d5d: Layer already exists
+a1689afd6007: Layer already exists
+30ad2d1597a9: Layer already exists
+7f78e22f72fb: Layer already exists
+75c137aedfb2: Layer already exists
+92ef3b67b69b: Layer already exists
+00bfc302acd7-14: digest: sha256:d78406694582cdd99a5fa0d8c5d8479e1bc5ed73275da143e8189af9fcfa7464 size: 2199
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy main)
+[Pipeline] sh
++ set -eu
++ aws eks update-kubeconfig --name blogapp-eks --region ap-south-1
+Updated context arn:aws:eks:ap-south-1:782610231927:cluster/blogapp-eks in /var/jenkins_home/.kube/config
++ kubectl set image deployment/backend backend=782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14 -n blogapp
+deployment.apps/backend image updated
++ kubectl set image deployment/frontend frontend=782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14 -n blogapp
+deployment.apps/frontend image updated
++ bash scripts/validate.sh
+Waiting for deployment "backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "backend" rollout to finish: 1 old replicas are pending termination...
+deployment "backend" successfully rolled out
+Waiting for deployment "frontend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "frontend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "frontend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "frontend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "frontend" rollout to finish: 1 old replicas are pending termination...
+deployment "frontend" successfully rolled out
+ok+ python3 scripts/smoke.py
+Register, create, read and comment passed. Persistence URL: https://1c3j649rgg.execute-api.ap-south-1.amazonaws.com/api/posts/persistence-proof-mvpmerzq
++ python3 scripts/collect-evidence.py --routine --out reports/evidence
+Evidence saved to reports/evidence
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] archiveArtifacts
+Archiving artifacts
+[Pipeline] sh
++ docker logout 782610231927.dkr.ecr.ap-south-1.amazonaws.com
+Removing login credentials for 782610231927.dkr.ecr.ap-south-1.amazonaws.com
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

@@ -1,0 +1,46 @@
+{
+    "apiVersion": "v1",
+    "kind": "PersistentVolumeClaim",
+    "metadata": {
+        "annotations": {
+            "pv.kubernetes.io/bind-completed": "yes",
+            "pv.kubernetes.io/bound-by-controller": "yes",
+            "volume.beta.kubernetes.io/storage-provisioner": "ebs.csi.aws.com",
+            "volume.kubernetes.io/selected-node": "ip-192-168-91-188.ap-south-1.compute.internal",
+            "volume.kubernetes.io/storage-provisioner": "ebs.csi.aws.com"
+        },
+        "creationTimestamp": "2026-10-26T17:22:01Z",
+        "finalizers": [
+            "kubernetes.io/pvc-protection"
+        ],
+        "labels": {
+            "app": "mysql"
+        },
+        "name": "data-mysql-0",
+        "namespace": "blogapp",
+        "resourceVersion": "6589",
+        "uid": "f58922e6-d455-4c9d-8306-33fa70441279"
+    },
+    "spec": {
+        "accessModes": [
+            "ReadWriteOnce"
+        ],
+        "resources": {
+            "requests": {
+                "storage": "20Gi"
+            }
+        },
+        "storageClassName": "blog-gp3",
+        "volumeMode": "Filesystem",
+        "volumeName": "pvc-f58922e6-d455-4c9d-8306-33fa70441279"
+    },
+    "status": {
+        "accessModes": [
+            "ReadWriteOnce"
+        ],
+        "capacity": {
+            "storage": "20Gi"
+        },
+        "phase": "Bound"
+    }
+}

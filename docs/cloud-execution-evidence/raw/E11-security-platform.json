@@ -1,0 +1,171 @@
+{
+  "capturedAt": "2026-10-26T19:21:51.558112+00:00",
+  "clusterName": "blogapp-eks",
+  "status": "ACTIVE",
+  "kubernetesVersion": "1.35",
+  "endpointPrivateAccess": true,
+  "publicAccessRestrictedToSingleOperatorCidr": true,
+  "enabledControlPlaneLogs": [
+    {
+      "types": [
+        "api",
+        "audit",
+        "authenticator"
+      ],
+      "enabled": true
+    }
+  ],
+  "ciRoleArn": "arn:aws:iam::782610231927:role/blogapp-ci-role",
+  "ciAccessEntry": {
+    "clusterName": "blogapp-eks",
+    "principalArn": "arn:aws:iam::782610231927:role/blogapp-ci-role",
+    "kubernetesGroups": [
+      "blog-deployers"
+    ],
+    "accessEntryArn": "arn:aws:eks:ap-south-1:782610231927:access-entry/blogapp-eks/role/782610231927/blogapp-ci-role/a8d0bc99-9cee-fd89-0a64-cecd43e0d4d7",
+    "createdAt": "2026-10-26T22:42:42.860000+05:30",
+    "modifiedAt": "2026-10-26T22:42:42.860000+05:30",
+    "tags": {
+      "Project": "BlogApp"
+    },
+    "username": "arn:aws:sts::782610231927:assumed-role/blogapp-ci-role/{{SessionName}}",
+    "type": "STANDARD"
+  },
+  "ciInlinePolicy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "ecr:GetAuthorizationToken"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:CompleteLayerUpload",
+          "ecr:InitiateLayerUpload",
+          "ecr:PutImage",
+          "ecr:UploadLayerPart",
+          "ecr:BatchGetImage",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:DescribeImages"
+        ],
+        "Resource": [
+          "arn:aws:ecr:ap-south-1:782610231927:repository/blogapp-frontend",
+          "arn:aws:ecr:ap-south-1:782610231927:repository/blogapp-backend"
+        ]
+      },
+      {
+        "Effect": "Allow",
+        "Action": "eks:DescribeCluster",
+        "Resource": "arn:aws:eks:ap-south-1:782610231927:cluster/blogapp-eks"
+      }
+    ]
+  },
+  "securityGroups": [
+    {
+      "GroupId": "sg-08d1ea891204b2308",
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "-1",
+          "UserIdGroupPairs": [],
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "Ipv6Ranges": [],
+          "PrefixListIds": []
+        }
+      ],
+      "Tags": [
+        {
+          "Key": "Project",
+          "Value": "BlogApp"
+        }
+      ],
+      "VpcId": "vpc-09ac63fde95516b33",
+      "SecurityGroupArn": "arn:aws:ec2:ap-south-1:782610231927:security-group/sg-08d1ea891204b2308",
+      "OwnerId": "782610231927",
+      "GroupName": "blogapp-private-alb",
+      "Description": "Private BlogApp origin; only CloudFront VPC origin may connect",
+      "IpPermissions": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 80,
+          "ToPort": 80,
+          "UserIdGroupPairs": [
+            {
+              "Description": "API Gateway VPC link application HTTPS ingress",
+              "UserId": "782610231927",
+              "GroupId": "sg-03a904322b5b967cd"
+            }
+          ],
+          "IpRanges": [],
+          "Ipv6Ranges": [],
+          "PrefixListIds": []
+        }
+      ]
+    },
+    {
+      "GroupId": "sg-098698a7df6e20671",
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "-1",
+          "UserIdGroupPairs": [],
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "Ipv6Ranges": [],
+          "PrefixListIds": []
+        }
+      ],
+      "VpcId": "vpc-09ac63fde95516b33",
+      "SecurityGroupArn": "arn:aws:ec2:ap-south-1:782610231927:security-group/sg-098698a7df6e20671",
+      "OwnerId": "782610231927",
+      "GroupName": "blogapp-ci-private-admin",
+      "Description": "BlogApp CI host with no inbound rules; administration through SSM",
+      "IpPermissions": []
+    }
+  ],
+  "cni": {
+    "addonName": "vpc-cni",
+    "clusterName": "blogapp-eks",
+    "status": "ACTIVE",
+    "addonVersion": "v1.22.4-eksbuild.8",
+    "health": {
+      "issues": []
+    },
+    "addonArn": "arn:aws:eks:ap-south-1:782610231927:addon/blogapp-eks/vpc-cni/84d0bc95-06ec-341d-497b-1884796eec5e",
+    "createdAt": "2026-10-26T22:32:41.782000+05:30",
+    "modifiedAt": "2026-10-26T22:35:44.576000+05:30",
+    "serviceAccountRoleArn": "arn:aws:iam::782610231927:role/eksctl-blogapp-eks-addon-vpc-cni-Role1-5DLXzJ3XQYNO",
+    "tags": {},
+    "configurationValues": "{\"enableNetworkPolicy\": \"true\"}",
+    "namespaceConfig": {
+      "namespace": "kube-system"
+    }
+  },
+  "databaseSecretMetadata": {
+    "ARN": "arn:aws:secretsmanager:ap-south-1:782610231927:secret:blogapp/20261026/application-X8HDpN",
+    "Name": "blogapp/20261026/application",
+    "LastChangedDate": "2026-10-26T22:51:27.701000+05:30",
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "BlogApp"
+      }
+    ],
+    "VersionIdsToStages": {
+      "7ac0c54f-d9fa-4146-9ec0-e2b8df76cb1d": [
+        "AWSCURRENT"
+      ]
+    },
+    "CreatedDate": "2026-10-26T22:51:27.516000+05:30"
+  }
+}

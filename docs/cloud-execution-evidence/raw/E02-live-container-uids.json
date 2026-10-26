@@ -1,0 +1,9 @@
+{
+  "capturedAt": "2026-10-26T19:21:52.734384+00:00",
+  "actualContainerUserIds": {
+    "frontend": 101,
+    "backend": 1000,
+    "mysql": 999
+  },
+  "allNonRoot": true
+}

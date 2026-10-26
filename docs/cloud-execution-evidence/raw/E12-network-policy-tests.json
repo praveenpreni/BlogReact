@@ -1,0 +1,62 @@
+{
+  "capturedAt": "2026-10-26T18:36:13.706688+00:00",
+  "records": [
+    {
+      "test": "Create isolated test client",
+      "command": "kubectl apply -f C:\\Users\\pravn\\Documents\\Codex\\2026-10-21\\it\\work\\live-paid\\network-proof-pod.json",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "seconds": 7.47,
+      "output": "pod/blog-network-denied-proof created"
+    },
+    {
+      "test": "Test client ready",
+      "command": "kubectl wait --for=condition=Ready pod/blog-network-denied-proof -n blogapp --timeout=120s",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "seconds": 6.03,
+      "output": "pod/blog-network-denied-proof condition met"
+    },
+    {
+      "test": "Unrelated pod cannot reach MySQL",
+      "command": "kubectl exec -n blogapp blog-network-denied-proof -- nc -z -w 3 mysql-service 3306",
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "seconds": 9.02,
+      "output": "command terminated with exit code 1"
+    },
+    {
+      "test": "Unrelated pod cannot reach backend",
+      "command": "kubectl exec -n blogapp blog-network-denied-proof -- wget -q -T 3 -O - http://backend-service:5000/readyz",
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "seconds": 9.84,
+      "output": "wget: download timed out\ncommand terminated with exit code 1"
+    },
+    {
+      "test": "Frontend can reach backend",
+      "command": "kubectl exec -n blogapp deployment/frontend -- wget -q -T 5 -O - http://backend-service:5000/readyz",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "seconds": 5.91,
+      "output": "{\"status\":\"ready\"}"
+    },
+    {
+      "test": "Backend can reach MySQL",
+      "command": "kubectl exec -n blogapp deployment/backend -- node -e const net=require('net');const s=net.createConnection({host:'mysql-service',port:3306});s.setTimeout(3000);s.on('connect',()=>{console.log('MySQL TCP connection allowed from backend');s.destroy();});s.on('error',()=>process.exit(1));s.on('timeout',()=>process.exit(1));",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "seconds": 7.5,
+      "output": "MySQL TCP connection allowed from backend"
+    },
+    {
+      "test": "Remove temporary test client",
+      "command": "kubectl delete pod/blog-network-denied-proof -n blogapp --wait=false",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "seconds": 6.27,
+      "output": "pod \"blog-network-denied-proof\" deleted from blogapp namespace"
+    }
+  ],
+  "passed": true
+}

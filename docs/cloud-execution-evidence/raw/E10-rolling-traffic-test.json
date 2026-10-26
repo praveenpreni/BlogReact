@@ -1,0 +1,18 @@
+{
+  "capturedAt": "2026-10-26T18:38:58.936999+00:00",
+  "applicationUrl": "https://1c3j649rgg.execute-api.ap-south-1.amazonaws.com",
+  "requests": 196,
+  "failedRequests": 0,
+  "httpStatusCounts": {
+    "200": 196
+  },
+  "releaseBuild": {
+    "_class": "org.jenkinsci.plugins.workflow.job.WorkflowRun",
+    "building": false,
+    "number": 12,
+    "result": "SUCCESS"
+  },
+  "passed": true,
+  "maxLatencyMilliseconds": 1593.0,
+  "failures": []
+}

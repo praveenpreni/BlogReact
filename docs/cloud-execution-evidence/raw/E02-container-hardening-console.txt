@@ -1,0 +1,91 @@
+Started by user admin
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/Platform-ReadOnly-Evidence
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Read EKS workloads)
+[Pipeline] sh
++ set -eu
++ mkdir -p reports
++ aws eks update-kubeconfig --name blogapp-eks --region ap-south-1
+Updated context arn:aws:eks:ap-south-1:782610231927:cluster/blogapp-eks in /var/jenkins_home/.kube/config
++ kubectl get deploy,pod,svc,ingress -n blogapp -o wide
++ tee reports/workloads.txt
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                                                           SELECTOR
+deployment.apps/backend    2/2     2            2           36m   backend      782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14    app=backend
+deployment.apps/frontend   2/2     2            2           36m   frontend     782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14   app=frontend
+
+NAME                            READY   STATUS    RESTARTS   AGE     IP                NODE                                             NOMINATED NODE   READINESS GATES
+pod/backend-dd66ff949-kwgp5     1/1     Running   0          8m14s   192.168.99.149    ip-192-168-127-247.ap-south-1.compute.internal   <none>           <none>
+pod/backend-dd66ff949-ltdfk     1/1     Running   0          8m20s   192.168.125.237   ip-192-168-127-247.ap-south-1.compute.internal   <none>           <none>
+pod/frontend-7b4d85dd65-ljhk2   1/1     Running   0          8m19s   192.168.76.137    ip-192-168-91-188.ap-south-1.compute.internal    <none>           1/1
+pod/frontend-7b4d85dd65-thl65   1/1     Running   0          7m56s   192.168.65.212    ip-192-168-91-188.ap-south-1.compute.internal    <none>           1/1
+pod/mysql-0                     1/1     Running   0          23m     192.168.84.196    ip-192-168-91-188.ap-south-1.compute.internal    <none>           <none>
+
+NAME                       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE    SELECTOR
+service/backend-service    ClusterIP   10.100.68.178    <none>        5000/TCP   36m    app=backend
+service/frontend-service   ClusterIP   10.100.128.18    <none>        8080/TCP   110m   app=frontend
+service/mysql-headless     ClusterIP   None             <none>        3306/TCP   104m   app=mysql
+service/mysql-service      ClusterIP   10.100.255.127   <none>        3306/TCP   105m   app=mysql
+
+NAME                                CLASS   HOSTS   ADDRESS                                                               PORTS   AGE
+ingress.networking.k8s.io/blogapp   alb     *       internal-blogapp-private-alb-956050535.ap-south-1.elb.amazonaws.com   80      110m
++ kubectl get deployment backend frontend -n blogapp -o json
++ kubectl rollout status deployment/backend -n blogapp --timeout=120s
+deployment "backend" successfully rolled out
++ kubectl rollout status deployment/frontend -n blogapp --timeout=120s
+deployment "frontend" successfully rolled out
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Inspect deployed container hardening)
+[Pipeline] sh
++ set -eu
++ kubectl get deployment frontend -n blogapp -o jsonpath={.spec.template.spec.containers[0].image}
++ image=782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14
++ echo Deployed frontend image: 782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14
+Deployed frontend image: 782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14
++ docker image inspect 782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-frontend:00bfc302acd7-14 --format Runtime user={{.Config.User}}; image bytes={{.Size}}; healthcheck={{json .Config.Healthcheck}}
+Runtime user=101; image bytes=63973306; healthcheck={"Test":["CMD-SHELL","wget -q -O /dev/null http://127.0.0.1:8080/healthz || exit 1"],"Interval":30000000000,"Timeout":5000000000}
++ kubectl get deployment backend -n blogapp -o jsonpath={.spec.template.spec.containers[0].image}
++ image=782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14
++ echo Deployed backend image: 782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14
+Deployed backend image: 782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14
++ docker image inspect 782610231927.dkr.ecr.ap-south-1.amazonaws.com/blogapp-backend:00bfc302acd7-14 --format Runtime user={{.Config.User}}; image bytes={{.Size}}; healthcheck={{json .Config.Healthcheck}}
+Runtime user=node; image bytes=181454271; healthcheck={"Test":["CMD-SHELL","node -e \"fetch('http://127.0.0.1:5000/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""],"Interval":30000000000,"Timeout":5000000000}
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Verify least privilege)
+[Pipeline] sh
++ set -eu
++ echo The release identity must NOT read application Secrets:
+The release identity must NOT read application Secrets:
++ kubectl get secrets -n blogapp
++ cat reports/secrets-denied.txt
+Error from server (Forbidden): secrets is forbidden: User "arn:aws:sts::782610231927:assumed-role/blogapp-ci-role/i-0a5d5a64d20eab043" cannot list resource "secrets" in API group "" in the namespace "blogapp"
++ echo The release identity must NOT execute commands inside application pods:
+The release identity must NOT execute commands inside application pods:
++ kubectl auth can-i create pods/exec -n blogapp
+no
++ echo The release identity may patch only application deployments:
+The release identity may patch only application deployments:
++ kubectl auth can-i patch deployments -n blogapp
+yes
++ echo The release identity must NOT patch another namespace:
+The release identity must NOT patch another namespace:
++ kubectl auth can-i patch deployments -n default
+no
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] archiveArtifacts
+Archiving artifacts
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

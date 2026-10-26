@@ -1,0 +1,18 @@
+{
+  "analysisId": "ecbb824e-6f6a-4dc7-81cd-6c3f0caa097b",
+  "projectKey": "blogapp-gate-negative",
+  "qualityGate": {
+    "status": "ERROR",
+    "conditions": [
+      {
+        "status": "ERROR",
+        "metricKey": "coverage",
+        "comparator": "LT",
+        "errorThreshold": "100",
+        "actualValue": "0.0"
+      }
+    ],
+    "ignoredConditions": false,
+    "caycStatus": "over-compliant"
+  }
+}
