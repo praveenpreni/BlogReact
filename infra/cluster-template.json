@@ -53,7 +53,7 @@
     {
       "name": "aws-ebs-csi-driver",
       "attachPolicyARNs": [
-        "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicyV2"
+        "arn:aws:iam::aws:policy/AmazonEBSCSIDriverPolicyV2"
       ]
     }
   ]

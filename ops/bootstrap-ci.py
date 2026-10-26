@@ -90,7 +90,8 @@ if not values.get('nexusConfigured'):
  repos=n('/service/rest/v1/repositories',method='GET')
  if not any(r['name']=='blog-releases' for r in repos):n('/service/rest/v1/repositories/raw/hosted',{'name':'blog-releases','online':True,'storage':{'blobStoreName':'default','strictContentTypeValidation':True,'writePolicy':'ALLOW_ONCE'},'cleanup':{'policyNames':[]}})
  if not any(r['name']=='blog-images' for r in repos):n('/service/rest/v1/repositories/docker/hosted',{'name':'blog-images','online':True,'storage':{'blobStoreName':'default','strictContentTypeValidation':True,'writePolicy':'ALLOW_ONCE'},'cleanup':{'policyNames':[]},'docker':{'v1Enabled':False,'forceBasicAuth':True,'httpPort':5001}})
- n('/service/rest/v1/security/realms/active',['NexusAuthenticatingRealm','NexusAuthorizingRealm','DockerToken'],method='PUT')
+ active=n('/service/rest/v1/security/realms/active',method='GET')
+ n('/service/rest/v1/security/realms/active',list(dict.fromkeys(active+['DockerToken'])),method='PUT')
  privileges=['nx-repository-view-'+fmt+'-'+repo+'-'+action for fmt,repo in [('raw','blog-releases'),('docker','blog-images')] for action in ['browse','read','add','edit']]
  if not any(r['id']=='blog-deployer' for r in n('/service/rest/v1/security/roles',method='GET')):n('/service/rest/v1/security/roles',{'id':'blog-deployer','name':'Blog release deployer','description':'Read and publish only BlogApp repositories','privileges':privileges,'roles':[]})
  if not any(u['userId']=='blog-deployer' for u in n('/service/rest/v1/security/users',method='GET')):n('/service/rest/v1/security/users',{'userId':'blog-deployer','firstName':'Blog','lastName':'Pipeline','emailAddress':'pipeline@example.invalid','password':values['nexusDeployPassword'],'status':'active','roles':['blog-deployer']})
