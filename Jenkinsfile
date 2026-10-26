@@ -9,6 +9,14 @@ pipeline {
   string(name: 'NEXUS_URL', defaultValue: env.BLOG_NEXUS_URL ?: 'https://REPLACE_NEXUS/repository/blog-releases')
   string(name: 'NEXUS_DOCKER_REGISTRY', defaultValue: env.BLOG_NEXUS_DOCKER_REGISTRY ?: 'REPLACE_NEXUS_DOCKER_HOST:PORT')
  }
+ environment {
+  AWS_REGION = "${params.AWS_REGION ?: 'ap-south-1'}"
+  EKS_CLUSTER = "${params.EKS_CLUSTER ?: 'blogapp-eks'}"
+  ECR_REGISTRY = "${params.ECR_REGISTRY ?: env.BLOG_ECR_REGISTRY}"
+  APP_URL = "${params.APP_URL ?: env.BLOG_APP_URL}"
+  NEXUS_URL = "${params.NEXUS_URL ?: env.BLOG_NEXUS_URL}"
+  NEXUS_DOCKER_REGISTRY = "${params.NEXUS_DOCKER_REGISTRY ?: env.BLOG_NEXUS_DOCKER_REGISTRY}"
+ }
  stages {
   stage('Checkout') { steps { checkout scm; script { env.IMAGE_TAG = sh(script: 'git rev-parse --short=12 HEAD', returnStdout:true).trim() + '-' + env.BUILD_NUMBER } } }
   stage('Build and test') { steps { sh 'mkdir -p reports; cd backend && npm ci && npm test'; sh 'cd frontend && npm ci && npm test && npm run build' } }
